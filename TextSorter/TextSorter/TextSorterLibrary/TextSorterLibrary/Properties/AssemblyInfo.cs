@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TextSorter")]
+[assembly: AssemblyTitle("TextSorterLibrary")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TextSorter")]
+[assembly: AssemblyProduct("TextSorterLibrary")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f43d1715-f07e-47b7-8d4c-d5549266d44d")]
+[assembly: Guid("1d9b984f-d8ce-458f-a36c-384ab80afdf2")]
 
 // Version information for an assembly consists of the following four values:
 //
