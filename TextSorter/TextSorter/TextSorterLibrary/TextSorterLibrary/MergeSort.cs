@@ -118,10 +118,10 @@ namespace TextSorterLibrary
 
         static void MergeTheChunks(String pathOfSplits, String pathOfSortFile)
         {
+            String[] paths = Directory.GetFiles(pathOfSplits, "split*.dat");
+            Pair<StreamReader, String>[] chunks = GetInitializedPairOfReaders(paths);
             try
             {
-                String[] paths = Directory.GetFiles(pathOfSplits, "split*.dat");
-                Pair<StreamReader, String>[] chunks = GetInitializedPairOfReaders(paths);
                 var index = 0;
                 using (StreamWriter sw = new StreamWriter(pathOfSortFile))
                 {
@@ -132,11 +132,14 @@ namespace TextSorterLibrary
                         chunks = GetNextElementAndFixReader(chunks, index);
                     }
                 }
-
-                DeleteFiles(paths);
             } catch (Exception e)
             {
                 throw new Exception(e.Message);
+            } finally
+            {
+                foreach (var pair in chunks)
+                    pair.Item1.Close();
+                DeleteFiles(paths);
             }
         }
 
