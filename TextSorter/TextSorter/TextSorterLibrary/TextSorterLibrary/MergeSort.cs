@@ -9,69 +9,103 @@ namespace TextSorterLibrary
 {
     public static class MergeSort
     {
-        public static void Sort(String fileToSort, String pathOfSplits,
+        private class Pair<T1, T2>
+        {
+            public T1 Item1 { get; set; }
+            public T2 Item2 { get; set; }
+        }
+
+        private static String pathOfSplits = Directory.GetCurrentDirectory();
+
+        public static void Sort(String fileToSort, String userPathOfSplits,
             String pathOfSortFile)
         {
-            Split(fileToSort, pathOfSplits);
-            SortTheChunks(pathOfSplits);
-            MergeTheChunks(pathOfSplits, pathOfSortFile);
+            pathOfSplits = userPathOfSplits;
+            SortExecute(fileToSort, pathOfSplits, pathOfSortFile);
+        }
+
+        public static void Sort(String fileToSort, String pathOfSortFile)
+        {
+            SortExecute(fileToSort, pathOfSplits, pathOfSortFile);
+        }
+
+        private static void SortExecute(String fileToSort, String userPathOfSplits,
+            String pathOfSortFile)
+        {
+            Split(fileToSort, userPathOfSplits);
+            SortTheChunks(userPathOfSplits);
+            MergeTheChunks(userPathOfSplits, pathOfSortFile);
         }
 
         static void Split(String filePath, String pathOfSplits)
         {
-            Int32 splitsCounter = 1;
-            StreamWriter sw = new StreamWriter(
-            String.Format(pathOfSplits + "split{0:d5}.dat", splitsCounter));
-            Int64 linesCounter = 0;
-            using (StreamReader sr = new StreamReader(filePath))
+            try
             {
-                while (sr.Peek() >= 0)
+                Int32 splitsCounter = 1;
+                StreamWriter sw = new StreamWriter(
+                String.Format(pathOfSplits + "\\split{0:d5}.dat", splitsCounter));
+                using (StreamReader sr = new StreamReader(filePath))
                 {
-                    if (++linesCounter % 5000 == 0)
-                        Console.WriteLine("{0:f2}% \r",
-                            100.0 * sr.BaseStream.Position / sr.BaseStream.Length);
-
-                    sw.WriteLine(sr.ReadLine());
-
-                    if (sw.BaseStream.Length > 1000000 && sr.Peek() >= 0)
+                    while (sr.Peek() >= 0)
                     {
-                        sw.Close();
-                        sw = new StreamWriter(String.Format(pathOfSplits + 
-                            "split{0:d5}.dat", ++splitsCounter));
+                        sw.WriteLine(sr.ReadLine());
+
+                        if (sw.BaseStream.Length > 10000000 && sr.Peek() >= 0)
+                        {
+                            sw.Close();
+                            sw = new StreamWriter(String.Format(pathOfSplits +
+                                "split{0:d5}.dat", ++splitsCounter));
+                        }
                     }
                 }
+                sw.Close();
+            } catch (Exception e)
+            {
+                throw new Exception(e.Message);
             }
-            sw.Close();
+
         }
 
         static void SortTheChunks(String pathOfSplits)
         {
-            foreach (String path in Directory.GetFiles(pathOfSplits, "split*.dat"))
+            try
             {
-                String[] contents = File.ReadAllLines(path);
-                Array.Sort(contents);
-                File.WriteAllLines(path, contents);
-                contents = null;
-                GC.Collect();
+                foreach (String path in Directory.GetFiles(pathOfSplits, "split*.dat"))
+                {
+                    String[] contents = File.ReadAllLines(path);
+                    Array.Sort(contents);
+                    File.WriteAllLines(path, contents);
+                    contents = null;
+                    GC.Collect();
+                }
+            } catch (Exception e)
+            {
+                throw new Exception(e.Message);
             }
         }
 
         static void MergeTheChunks(String pathOfSplits, String pathOfSortFile)
         {
-            String[] paths = Directory.GetFiles(pathOfSplits, "split*.dat");
-            Pair<StreamReader, String>[] chunks = GetInitializedPairOfReaders(paths);
-            var index = 0;
-            using (StreamWriter sw = new StreamWriter(pathOfSortFile))
+            try
             {
-                while(chunks.Length != 0)
+                String[] paths = Directory.GetFiles(pathOfSplits, "split*.dat");
+                Pair<StreamReader, String>[] chunks = GetInitializedPairOfReaders(paths);
+                var index = 0;
+                using (StreamWriter sw = new StreamWriter(pathOfSortFile))
                 {
-                    index = GetSortStringIndexFromPairs(chunks);
-                    sw.WriteLine(chunks[index].Item2);
-                    chunks = GetNextElementAndFixReader(chunks, index);
+                    while (chunks.Length != 0)
+                    {
+                        index = GetSortStringIndexFromPairs(chunks);
+                        sw.WriteLine(chunks[index].Item2);
+                        chunks = GetNextElementAndFixReader(chunks, index);
+                    }
                 }
+
+                DeleteFiles(paths);
+            } catch (Exception e)
+            {
+                throw new Exception(e.Message);
             }
-            
-            DeleteFiles(paths);
         }
 
         private static Pair<StreamReader, String>[] GetNextElementAndFixReader(
@@ -134,11 +168,6 @@ namespace TextSorterLibrary
             }
         }
 
-        private class Pair<T1,T2>
-        {
-            public T1 Item1 { get; set; }
-            public T2 Item2 { get; set; }
-        }
     }
 
 }

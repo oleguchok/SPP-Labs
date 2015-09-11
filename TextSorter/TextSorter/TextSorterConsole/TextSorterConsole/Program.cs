@@ -12,14 +12,19 @@ namespace TextSorterConsole
     {
         static void Main(string[] args)
         {
-            MergeSort.Sort("c:\\OLEGDATA\\tt.txt", "c:\\OLEGDATA\\", "c:\\OLEGDATA\\sort.txt");
-            StreamReader sr = new StreamReader("c:\\OLEGDATA\\sort.txt");
-            while (sr.Peek() > 0)
+            
+            try
             {
-                Console.WriteLine(sr.ReadLine());
-                Console.WriteLine("----");
+                if (args.Length == 3)
+                    MergeSort.Sort(args[0], args[1], args[2]);
+                if (args.Length == 2)
+                    MergeSort.Sort(args[0], args[1]);
+                else
+                    Console.WriteLine("Must be 2 or 3 arguments");
+            } catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
-            sr.Close();
         }
     }
 }
