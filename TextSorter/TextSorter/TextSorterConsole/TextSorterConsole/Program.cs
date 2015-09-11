@@ -15,6 +15,8 @@ namespace TextSorterConsole
             
             try
             {
+                if (args.Length == 4)
+                    MergeSort.Sort(args[0], args[1], args[2], args[3]);
                 if (args.Length == 3)
                     MergeSort.Sort(args[0], args[1], args[2]);
                 if (args.Length == 2)

@@ -15,26 +15,45 @@ namespace TextSorterLibrary
             public T2 Item2 { get; set; }
         }
 
-        private static String pathOfSplits = Directory.GetCurrentDirectory();
+        private static String pathOfSplits = Directory.GetCurrentDirectory() + "\\";
+        private static Boolean order = true;
 
         public static void Sort(String fileToSort, String userPathOfSplits,
-            String pathOfSortFile)
+            String pathOfSortFile, String order)
         {
             pathOfSplits = userPathOfSplits;
-            SortExecute(fileToSort, pathOfSplits, pathOfSortFile);
+            MergeSort.order = TransformStringOrderInBool(order);
+            SortExecute(fileToSort, pathOfSplits, pathOfSortFile, 
+                MergeSort.order);
+        }
+
+        public static void Sort(String fileToSort, String pathOfSortFile,
+            String order)
+        {
+            MergeSort.order = TransformStringOrderInBool(order);
+            SortExecute(fileToSort, pathOfSplits, pathOfSortFile, 
+                MergeSort.order);
         }
 
         public static void Sort(String fileToSort, String pathOfSortFile)
         {
-            SortExecute(fileToSort, pathOfSplits, pathOfSortFile);
+            SortExecute(fileToSort, pathOfSplits, pathOfSortFile, 
+                MergeSort.order);
         }
 
         private static void SortExecute(String fileToSort, String userPathOfSplits,
-            String pathOfSortFile)
+            String pathOfSortFile, Boolean order)
         {
             Split(fileToSort, userPathOfSplits);
             SortTheChunks(userPathOfSplits);
             MergeTheChunks(userPathOfSplits, pathOfSortFile);
+        }
+
+        private static Boolean TransformStringOrderInBool(String order)
+        {
+            if (order.ToLower() == "desc")
+                return false;
+            return true;
         }
 
         static void Split(String filePath, String pathOfSplits)
@@ -73,7 +92,7 @@ namespace TextSorterLibrary
                 foreach (String path in Directory.GetFiles(pathOfSplits, "split*.dat"))
                 {
                     String[] contents = File.ReadAllLines(path);
-                    Array.Sort(contents);
+                    contents = SortArrayWithOrder(contents, MergeSort.order);
                     File.WriteAllLines(path, contents);
                     contents = null;
                     GC.Collect();
@@ -82,6 +101,19 @@ namespace TextSorterLibrary
             {
                 throw new Exception(e.Message);
             }
+        }
+
+        private static String[] SortArrayWithOrder(String[] array, Boolean order)
+        {
+            if (order)
+                Array.Sort(array, new Comparison<String>(
+                        (i1, i2) => i1.CompareTo(i2)
+                    ));
+            else
+                Array.Sort(array, new Comparison<String>(
+                        (i1, i2) => i2.CompareTo(i1)
+                    ));
+            return array;
         }
 
         static void MergeTheChunks(String pathOfSplits, String pathOfSortFile)
@@ -95,7 +127,7 @@ namespace TextSorterLibrary
                 {
                     while (chunks.Length != 0)
                     {
-                        index = GetSortStringIndexFromPairs(chunks);
+                        index = GetCompareStringIndexFromPairs(chunks);
                         sw.WriteLine(chunks[index].Item2);
                         chunks = GetNextElementAndFixReader(chunks, index);
                     }
@@ -115,12 +147,14 @@ namespace TextSorterLibrary
             return CleanFromEmptyPairs(chunks);
         }
 
-        private static Int32 GetSortStringIndexFromPairs(Pair<StreamReader, String>[] chunks)
+        private static Int32 GetCompareStringIndexFromPairs(Pair<StreamReader, String>[] chunks)
         {
             Int32 temp = 0;
             for (Int32 i = 1; i < chunks.Length; i++)
             {
-                if (chunks[i].Item2.CompareTo(chunks[temp].Item2) < 0)
+                if (MergeSort.order && chunks[temp].Item2.CompareTo(chunks[i].Item2) > 0)
+                    temp = i;
+                if (!MergeSort.order && chunks[temp].Item2.CompareTo(chunks[i].Item2) < 0)
                     temp = i;
             }
             return temp;
