@@ -22,7 +22,7 @@ namespace TextSorterConsole
                 if (args.Length == 2)
                     MergeSort.Sort(args[0], args[1]);
                 else
-                    Console.WriteLine("Must be 2 or 3 arguments");
+                    Console.WriteLine("Must be 2 or 3 or 4 arguments");
             } catch(Exception e)
             {
                 Console.WriteLine(e.Message);

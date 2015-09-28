@@ -62,7 +62,7 @@ namespace TextSorterLibrary
             {
                 Int32 splitsCounter = 1;
                 StreamWriter sw = new StreamWriter(
-                String.Format(pathOfSplits + "\\split{0:d5}.dat", splitsCounter));
+                    String.Format(pathOfSplits + "\\split{0:d5}.dat", splitsCounter));
                 using (StreamReader sr = new StreamReader(filePath))
                 {
                     while (sr.Peek() >= 0)
