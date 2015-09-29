@@ -23,33 +23,30 @@ namespace PhotoEditor
             InitializeComponent();
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openToolStripButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = IMAGE_FORMATS;
 
             if (ofd.ShowDialog() == DialogResult.OK && ofd.FileName.Length > 0)
             {
-                pictureBoxMain.SizeMode = PictureBoxSizeMode.Zoom;
-                pictureBoxMain.Image = Image.FromFile(ofd.FileName);
-            }
+
+                pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+                pictureBox.Image = Image.FromFile(ofd.FileName);
+            }  
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveToolStripButton_Click(object sender, EventArgs e)
         {
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = IMAGE_FORMATS;
 
             if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0)
             {
-                pictureBoxMain.Image.Save(sfd.FileName);
+                pictureBox.Image.Save(sfd.FileName);
             }
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
     }
 
 }
