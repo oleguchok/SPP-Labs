@@ -25,7 +25,6 @@ namespace PhotoEditor
 
         private void openToolStripButton_Click(object sender, EventArgs e)
         {
-            bool OLEG_LOH = true;
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = IMAGE_FORMATS;
 
