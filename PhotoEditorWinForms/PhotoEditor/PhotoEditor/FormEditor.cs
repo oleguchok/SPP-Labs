@@ -20,6 +20,7 @@ namespace PhotoEditor
 
         public FormEditor()
         {
+            ;
             InitializeComponent();
         }
 
