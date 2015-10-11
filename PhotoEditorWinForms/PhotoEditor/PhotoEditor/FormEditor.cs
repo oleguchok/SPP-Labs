@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhotoEditor.ModalForm;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,6 +23,7 @@ namespace PhotoEditor
             "jpg (*.jpg)|*.jpg|bmp (*.bmp)|*.bmp|png (*.png)|*.png";
 
         private Boolean isCropSelected = false;
+        private Boolean isImageScaling = false;
         private Size modifiedImageSize;
         private Image originalImage;
 
@@ -67,7 +69,10 @@ namespace PhotoEditor
 
             if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0)
             {
-                pictureBox.Image.Save(sfd.FileName);
+                if (!isImageScaling)
+                    pictureBox.Image.Save(sfd.FileName);
+                else
+                    originalImage.Save(sfd.FileName);
             }
         }
 
@@ -125,18 +130,18 @@ namespace PhotoEditor
         {            
             if (e.KeyChar == 13)
             {
-                ResizeImageOnPictureBox(toolStripComboBoxZoom.Text);
+                ScaleImageOnPictureBox(toolStripComboBoxZoom.Text);
+                isImageScaling = true;
             }
         }
 
-        private void CalculateModifiedImageSize(String text)
+        private void CalculateModifiedImageSize(int widthZoom, int heightZoom)
         {
             try
             {
-                Int32 zoom = ParseSizeString(text);
                 modifiedImageSize = new Size(
-                    (originalImage.Width * zoom) / 100,
-                    (originalImage.Height * zoom) / 100);
+                    (originalImage.Width * widthZoom) / 100,
+                    (originalImage.Height * heightZoom) / 100);
             } catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message);
@@ -167,17 +172,20 @@ namespace PhotoEditor
 
         private void toolStripComboBoxZoom_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ResizeImageOnPictureBox(toolStripComboBoxZoom.Text);
+            ScaleImageOnPictureBox(toolStripComboBoxZoom.Text);
+            isImageScaling = true;
         }
 
         private void toolStripComboBoxZoom_Leave(object sender, EventArgs e)
         {
-            ResizeImageOnPictureBox(toolStripComboBoxZoom.Text);
+            ScaleImageOnPictureBox(toolStripComboBoxZoom.Text);
+            isImageScaling = true;
         }
 
-        private void ResizeImageOnPictureBox(String text)
+        private void ScaleImageOnPictureBox(String text)
         {
-            CalculateModifiedImageSize(text);
+            Int32 zoom = ParseSizeString(text);
+            CalculateModifiedImageSize(zoom, zoom);
             if (pictureBox.Image != null)
             {
                 Bitmap bm_source = new Bitmap(originalImage);
@@ -202,6 +210,19 @@ namespace PhotoEditor
             pictureBox.Image = image;
             pictureBox.Width = image.Width;
             pictureBox.Height = image.Height;
+        }
+
+        private void toolStripButtonResize_Click(object sender, EventArgs e)
+        {
+            ResizeForm resizeForm = new ResizeForm();
+            DataExchanger.EventHandler = new DataExchanger.ExchangeEvent(ResizeImage);
+            resizeForm.ShowDialog();
+            resizeForm.Dispose();
+        }
+
+        private void ResizeImage(int widht, int height)
+        {
+            ;
         }
     }
 
