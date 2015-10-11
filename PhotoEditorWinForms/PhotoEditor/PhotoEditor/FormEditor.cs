@@ -137,15 +137,10 @@ namespace PhotoEditor
 
         private void CalculateModifiedImageSize(int widthZoom, int heightZoom)
         {
-            try
-            {
-                modifiedImageSize = new Size(
-                    (originalImage.Width * widthZoom) / 100,
+            if (originalImage == null)
+                throw new ArgumentNullException("Image", "Choose image");
+            modifiedImageSize = new Size((originalImage.Width * widthZoom) / 100,
                     (originalImage.Height * heightZoom) / 100);
-            } catch (ArgumentException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }            
         }
 
         private int ParseSizeString(String text)
@@ -184,12 +179,18 @@ namespace PhotoEditor
 
         private void ScaleImageOnPictureBox(String text)
         {
-            Int32 zoom = ParseSizeString(text);
-            CalculateModifiedImageSize(zoom, zoom);
-            if (pictureBox.Image != null)
+            try 
             {
-                RedrawPictureBoxImage();
-                PictureBoxLocation();
+                Int32 zoom = ParseSizeString(text);
+                CalculateModifiedImageSize(zoom, zoom);
+                if (pictureBox.Image != null)
+                {
+                    RedrawPictureBoxImage();
+                    PictureBoxLocation();
+                }
+            } catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -221,7 +222,10 @@ namespace PhotoEditor
             if (pictureBox.Image != null)
             {
                 ResizeForm resizeForm = new ResizeForm();
-                DataExchanger.EventHandler = new DataExchanger.ExchangeEvent(ResizeImage);
+                DataExchanger.EventSizeHandler = 
+                    new DataExchanger.ExchangeSizeEvent(ResizeImage);
+                DataExchanger.EventAngleHandler =
+                    new DataExchanger.ExchangeAngleEvent(RotateImage);
                 resizeForm.ShowDialog();
                 resizeForm.Dispose();
             }
@@ -235,6 +239,11 @@ namespace PhotoEditor
             RedrawPictureBoxImage();
             originalImage = pictureBox.Image;
             PictureBoxLocation();
+        }
+
+        private void RotateImage(float angle)
+        {
+
         }
     }
 

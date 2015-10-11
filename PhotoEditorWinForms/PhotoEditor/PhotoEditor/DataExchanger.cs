@@ -8,7 +8,9 @@ namespace PhotoEditor
 {
     public static class DataExchanger
     {
-        public delegate void ExchangeEvent(int width, int height);
-        public static ExchangeEvent EventHandler;
+        public delegate void ExchangeSizeEvent(int width, int height);
+        public delegate void ExchangeAngleEvent(float angle);
+        public static ExchangeSizeEvent EventSizeHandler;
+        public static ExchangeAngleEvent EventAngleHandler;
     }
 }
