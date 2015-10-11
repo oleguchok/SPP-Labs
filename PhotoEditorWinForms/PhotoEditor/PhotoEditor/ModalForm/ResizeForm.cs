@@ -24,12 +24,21 @@ namespace PhotoEditor.ModalForm
 
         private void buttonResizeOk_Click(object sender, EventArgs e)
         {
-            var width = Int32.Parse(maskedTextBoxWidth.Text);
-            var height = Int32.Parse(maskedTextBoxHeight.Text);
-            if (width > 200 || height > 200)
-                MessageBox.Show("Percentage Must be less than 200");
+            int height, width;
+            if (Int32.TryParse(maskedTextBoxWidth.Text, out width) &&
+                Int32.TryParse(maskedTextBoxHeight.Text, out height))
+            {
+                if (width > 200 || height > 200)
+                    MessageBox.Show("Percentage Must be less than 200");
+                else
+                {
+                    DataExchanger.EventHandler(width, height);
+                    Close();
+                }
+                    
+            }
             else
-                DataExchanger.EventHandler(width, height);
+                MessageBox.Show("Incorrect input");
         }
     }
 }

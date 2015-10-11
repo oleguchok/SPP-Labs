@@ -357,7 +357,7 @@
             // toolStripButtonResize
             // 
             this.toolStripButtonResize.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonResize.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonResize.Image")));
+            this.toolStripButtonResize.Image = global::PhotoEditor.Properties.Resources.icon_64x64;
             this.toolStripButtonResize.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonResize.Name = "toolStripButtonResize";
             this.toolStripButtonResize.Size = new System.Drawing.Size(23, 22);

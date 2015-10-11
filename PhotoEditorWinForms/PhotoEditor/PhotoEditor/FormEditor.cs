@@ -188,21 +188,25 @@ namespace PhotoEditor
             CalculateModifiedImageSize(zoom, zoom);
             if (pictureBox.Image != null)
             {
-                Bitmap bm_source = new Bitmap(originalImage);
-                Bitmap bm_dest = new Bitmap(modifiedImageSize.Width, modifiedImageSize.Height,
-                    PixelFormat.Format24bppRgb);
-                using(Graphics gr_dest = Graphics.FromImage(bm_dest))
-                {
-                    gr_dest.CompositingQuality = CompositingQuality.HighQuality;
-                    gr_dest.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    gr_dest.SmoothingMode = SmoothingMode.HighQuality;
-                    gr_dest.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                    gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width + 1, bm_dest.Height + 1);
-                }                
-
-                InsertImageInPictureBox(pictureBox, bm_dest);
+                RedrawPictureBoxImage();
                 PictureBoxLocation();
             }
+        }
+
+        private void RedrawPictureBoxImage()
+        {
+            Bitmap bm_source = new Bitmap(originalImage);
+            Bitmap bm_dest = new Bitmap(modifiedImageSize.Width, modifiedImageSize.Height,
+                    PixelFormat.Format24bppRgb);
+            using (Graphics gr_dest = Graphics.FromImage(bm_dest))
+            {
+                gr_dest.CompositingQuality = CompositingQuality.HighQuality;
+                gr_dest.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                gr_dest.SmoothingMode = SmoothingMode.HighQuality;
+                gr_dest.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width + 1, bm_dest.Height + 1);
+            }
+            InsertImageInPictureBox(pictureBox, bm_dest);
         }
 
         private void InsertImageInPictureBox(PictureBox pictureBox, Image image)
@@ -214,15 +218,23 @@ namespace PhotoEditor
 
         private void toolStripButtonResize_Click(object sender, EventArgs e)
         {
-            ResizeForm resizeForm = new ResizeForm();
-            DataExchanger.EventHandler = new DataExchanger.ExchangeEvent(ResizeImage);
-            resizeForm.ShowDialog();
-            resizeForm.Dispose();
+            if (pictureBox.Image != null)
+            {
+                ResizeForm resizeForm = new ResizeForm();
+                DataExchanger.EventHandler = new DataExchanger.ExchangeEvent(ResizeImage);
+                resizeForm.ShowDialog();
+                resizeForm.Dispose();
+            }
+            else
+                MessageBox.Show("No image to resize");
         }
 
         private void ResizeImage(int widht, int height)
         {
-            ;
+            CalculateModifiedImageSize(widht, height);
+            RedrawPictureBoxImage();
+            originalImage = pictureBox.Image;
+            PictureBoxLocation();
         }
     }
 
