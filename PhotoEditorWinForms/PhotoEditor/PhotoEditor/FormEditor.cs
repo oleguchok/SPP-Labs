@@ -29,6 +29,7 @@ namespace PhotoEditor
 
         public FormEditor()
         {
+            ; ;
             InitializeComponent();
         }
 
@@ -70,7 +71,7 @@ namespace PhotoEditor
             if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0)
             {
                 if (!isImageScaling)
-                    pictureBox.Image.Save(sfd.FileName);
+                pictureBox.Image.Save(sfd.FileName);
                 else
                     originalImage.Save(sfd.FileName);
             }
@@ -142,18 +143,18 @@ namespace PhotoEditor
         }
 
         private void toolStripComboBoxZoom_Leave(object sender, EventArgs e)
-        {
+            {
             ScaleImageOnPictureBox(toolStripComboBoxZoom.Text);
             isImageScaling = true;
         }
 
         private void CalculateModifiedImageSize(int widthZoom, int heightZoom)
-        {
+            {
             if (originalImage == null)
                 throw new ArgumentNullException("Image", "Choose image");
             modifiedImageSize = new Size((originalImage.Width * widthZoom) / 100,
                     (originalImage.Height * heightZoom) / 100);
-        }
+            }            
 
         private int ParseSizeString(String text)
         {
@@ -175,7 +176,7 @@ namespace PhotoEditor
                 else
                     return result;                    
             }
-        }        
+        }
 
         private void ScaleImageOnPictureBox(String text)
         {
@@ -187,28 +188,28 @@ namespace PhotoEditor
                 {
                     RedrawPictureBoxImage();
                     PictureBoxLocation();
-                }
+        }
             } catch (ArgumentException ex)
-            {
+        {
                 MessageBox.Show(ex.Message);
-            }
+        }
         }
 
         private void RedrawPictureBoxImage()
         {
-            Bitmap bm_source = new Bitmap(originalImage);
-            Bitmap bm_dest = new Bitmap(modifiedImageSize.Width, modifiedImageSize.Height,
+                Bitmap bm_source = new Bitmap(originalImage);
+                Bitmap bm_dest = new Bitmap(modifiedImageSize.Width, modifiedImageSize.Height,
                     PixelFormat.Format24bppRgb);
             using (Graphics gr_dest = Graphics.FromImage(bm_dest))
-            {
-                gr_dest.CompositingQuality = CompositingQuality.HighQuality;
-                gr_dest.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                gr_dest.SmoothingMode = SmoothingMode.HighQuality;
-                gr_dest.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width + 1, bm_dest.Height + 1);
+                {
+                    gr_dest.CompositingQuality = CompositingQuality.HighQuality;
+                    gr_dest.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    gr_dest.SmoothingMode = SmoothingMode.HighQuality;
+                    gr_dest.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width + 1, bm_dest.Height + 1);
+                }                
+                InsertImageInPictureBox(pictureBox, bm_dest);
             }
-            InsertImageInPictureBox(pictureBox, bm_dest);
-        }
 
         private void InsertImageInPictureBox(PictureBox pictureBox, Image image)
         {
@@ -276,6 +277,30 @@ namespace PhotoEditor
             g.DrawImage(image, new PointF(0, 0));
 
             return rotatedBmp;
+        }
+
+        private void TrackBarBrightness_Scroll(object sender, EventArgs e)
+        {
+            float value = TrackBarBrightness.Value * 0.01f;
+            float[][] colorMatrixElements = 
+            {
+                new float[] {1,0,0,0,0},
+                new float[] {0,1,0,0,0},
+                new float[] {0,0,1,0,0},
+                new float[] {0,0,0,1,0},
+                new float[] {value,value,value,0,1}
+            };
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+            ImageAttributes imageAttributes = new ImageAttributes();
+
+
+            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+            //PictureBox1.Image
+            Graphics g = Graphics.FromImage(originalImage);
+            g.DrawImage(originalImage,new Rectangle(0,0,originalImage.Width,originalImage.Height), 0, 0, 
+                originalImage.Width, originalImage.Height, GraphicsUnit.Pixel, imageAttributes);
+            
         }
     }
 
