@@ -204,6 +204,30 @@ namespace PhotoEditor
             pictureBox.Width = image.Width;
             pictureBox.Height = image.Height;
         }
+
+        private void TrackBarBrightness_Scroll(object sender, EventArgs e)
+        {
+            float value = TrackBarBrightness.Value * 0.01f;
+            float[][] colorMatrixElements = 
+            {
+                new float[] {1,0,0,0,0},
+                new float[] {0,1,0,0,0},
+                new float[] {0,0,1,0,0},
+                new float[] {0,0,0,1,0},
+                new float[] {value,value,value,0,1}
+            };
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+            ImageAttributes imageAttributes = new ImageAttributes();
+
+
+            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+            //PictureBox1.Image
+            Graphics g = Graphics.FromImage(originalImage);
+            g.DrawImage(originalImage,new Rectangle(0,0,originalImage.Width,originalImage.Height), 0, 0, 
+                originalImage.Width, originalImage.Height, GraphicsUnit.Pixel, imageAttributes);
+            
+        }
     }
 
 }
