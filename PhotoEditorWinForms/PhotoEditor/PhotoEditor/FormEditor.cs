@@ -22,7 +22,6 @@ namespace PhotoEditor
         private static readonly String IMAGE_FORMATS = 
             "jpg (*.jpg)|*.jpg|bmp (*.bmp)|*.bmp|png (*.png)|*.png";
 
-        private Boolean isCropSelected = false;
         private Boolean isImageScaling = false;
         private Size modifiedImageSize;
         private Image originalImage;
@@ -74,51 +73,6 @@ namespace PhotoEditor
                 else
                     originalImage.Save(sfd.FileName);
             }
-        }
-
-        private void toolStripButtonSelect_Click(object sender, EventArgs e)
-        {
-            isCropSelected = true;
-        }
-
-        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isCropSelected)
-            {
-                try 
-                {
-                    if (e.Button == System.Windows.Forms.MouseButtons.Left)
-                    {
-                        Cursor = Cursors.Cross;
-                    }
-                    pictureBox.Refresh();
-                }
-                catch (Exception ex)
-                { }
-            }
-        }
-
-        private void pictureBox_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (isCropSelected)
-            {
-               
-            }
-        }
-
-        private void pictureBox_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }      
-
-        private void toolStripDefaultCursor_Click(object sender, EventArgs e)
-        {
-            isCropSelected = false;
-        }
-
-        private void pictureBox_Click(object sender, EventArgs e)
-        {
-            
         }
 
         private void FormEditor_Resize(object sender, EventArgs e)
