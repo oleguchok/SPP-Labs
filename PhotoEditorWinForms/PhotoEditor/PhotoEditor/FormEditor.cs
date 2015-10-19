@@ -26,6 +26,7 @@ namespace PhotoEditor
         private Boolean isImageScaling = false;
         private Size modifiedImageSize;
         private Image originalImage;
+        private Image editedImage;
 
         public FormEditor()
         {
@@ -194,22 +195,26 @@ namespace PhotoEditor
                 MessageBox.Show(ex.Message);
         }
         }
-
         private void RedrawPictureBoxImage()
         {
-                Bitmap bm_source = new Bitmap(originalImage);
-                Bitmap bm_dest = new Bitmap(modifiedImageSize.Width, modifiedImageSize.Height,
-                    PixelFormat.Format24bppRgb);
+            Bitmap bm_source = new Bitmap(originalImage);
+            RedrawPictureBoxImage(bm_source);
+        }
+
+        private void RedrawPictureBoxImage(Image bm_source)
+        {
+            Bitmap bm_dest = new Bitmap(modifiedImageSize.Width, modifiedImageSize.Height,
+                PixelFormat.Format24bppRgb);
             using (Graphics gr_dest = Graphics.FromImage(bm_dest))
-                {
-                    gr_dest.CompositingQuality = CompositingQuality.HighQuality;
-                    gr_dest.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    gr_dest.SmoothingMode = SmoothingMode.HighQuality;
-                    gr_dest.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                    gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width + 1, bm_dest.Height + 1);
-                }                
-                InsertImageInPictureBox(pictureBox, bm_dest);
-            }
+            {
+                gr_dest.CompositingQuality = CompositingQuality.HighQuality;
+                gr_dest.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                gr_dest.SmoothingMode = SmoothingMode.HighQuality;
+                gr_dest.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width + 1, bm_dest.Height + 1);
+            }                
+            InsertImageInPictureBox(pictureBox, bm_dest);
+        }
 
         private void InsertImageInPictureBox(PictureBox pictureBox, Image image)
         {
@@ -297,10 +302,24 @@ namespace PhotoEditor
             imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
             //PictureBox1.Image
-            Graphics g = Graphics.FromImage(originalImage);
-            g.DrawImage(originalImage,new Rectangle(0,0,originalImage.Width,originalImage.Height), 0, 0, 
-                originalImage.Width, originalImage.Height, GraphicsUnit.Pixel, imageAttributes);
-            
+            editedImage = new Bitmap(originalImage);
+            Graphics g = Graphics.FromImage(editedImage);
+            g.DrawImage(editedImage, new Rectangle(0, 0, originalImage.Width, originalImage.Height)
+                , 0, 0, originalImage.Width, originalImage.Height,
+                GraphicsUnit.Pixel, imageAttributes);
+            RedrawPictureBoxImage(editedImage);
+        }
+
+        private void TrackBarBrightness_Leave(object sender, EventArgs e)
+        {
+            originalImage = editedImage;
+            TrackBarBrightness.Value = 0;
+        }
+
+        private void TrackBarBrightness_DragLeave(object sender, EventArgs e)
+        {
+            originalImage = editedImage;
+            TrackBarBrightness.Value = 0;
         }
     }
 

@@ -12,7 +12,6 @@ namespace TextSorterConsole
     {
         static void Main(string[] args)
         {
-            
             try
             {
                 if (args.Length == 4)
