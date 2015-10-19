@@ -17,6 +17,7 @@ using System.Windows.Forms;
 
 namespace PhotoEditor
 {
+    //TEESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
     public partial class FormEditor : Form
     {
         private static readonly String IMAGE_FORMATS = 
