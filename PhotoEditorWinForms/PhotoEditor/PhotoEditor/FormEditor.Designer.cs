@@ -32,21 +32,21 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageFile = new System.Windows.Forms.TabPage();
             this.toolStripFile = new System.Windows.Forms.ToolStrip();
-            this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabelZoom = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBoxZoom = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tabPageImage = new System.Windows.Forms.TabPage();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.panelPictureBox = new System.Windows.Forms.Panel();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.cutToolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonResize = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRotateLeft = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRotateRight = new System.Windows.Forms.ToolStripButton();
-            this.panelPictureBox = new System.Windows.Forms.Panel();
-            this.pictureBox = new System.Windows.Forms.PictureBox();
             this.tabControl.SuspendLayout();
             this.tabPageFile.SuspendLayout();
             this.toolStripFile.SuspendLayout();
@@ -94,36 +94,6 @@
             this.toolStripFile.Size = new System.Drawing.Size(665, 27);
             this.toolStripFile.TabIndex = 0;
             this.toolStripFile.Text = "toolStrip1";
-            // 
-            // newToolStripButton
-            // 
-            this.newToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.newToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripButton.Image")));
-            this.newToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.newToolStripButton.Name = "newToolStripButton";
-            this.newToolStripButton.Size = new System.Drawing.Size(23, 24);
-            this.newToolStripButton.Text = "&New";
-            this.newToolStripButton.Click += new System.EventHandler(this.newToolStripButton_Click);
-            // 
-            // openToolStripButton
-            // 
-            this.openToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.openToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripButton.Image")));
-            this.openToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.openToolStripButton.Name = "openToolStripButton";
-            this.openToolStripButton.Size = new System.Drawing.Size(23, 24);
-            this.openToolStripButton.Text = "&Open";
-            this.openToolStripButton.Click += new System.EventHandler(this.openToolStripButton_Click);
-            // 
-            // saveToolStripButton
-            // 
-            this.saveToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.saveToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripButton.Image")));
-            this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.saveToolStripButton.Name = "saveToolStripButton";
-            this.saveToolStripButton.Size = new System.Drawing.Size(23, 24);
-            this.saveToolStripButton.Text = "&Save";
-            this.saveToolStripButton.Click += new System.EventHandler(this.saveToolStripButton_Click);
             // 
             // toolStripSeparator
             // 
@@ -180,6 +150,55 @@
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // panelPictureBox
+            // 
+            this.panelPictureBox.AutoScroll = true;
+            this.panelPictureBox.Controls.Add(this.pictureBox);
+            this.panelPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelPictureBox.Location = new System.Drawing.Point(0, 59);
+            this.panelPictureBox.Name = "panelPictureBox";
+            this.panelPictureBox.Size = new System.Drawing.Size(679, 378);
+            this.panelPictureBox.TabIndex = 11;
+            // 
+            // pictureBox
+            // 
+            this.pictureBox.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureBox.Location = new System.Drawing.Point(4, 6);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(671, 369);
+            this.pictureBox.TabIndex = 7;
+            this.pictureBox.TabStop = false;
+            // 
+            // newToolStripButton
+            // 
+            this.newToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.newToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripButton.Image")));
+            this.newToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.newToolStripButton.Name = "newToolStripButton";
+            this.newToolStripButton.Size = new System.Drawing.Size(23, 24);
+            this.newToolStripButton.Text = "&New";
+            this.newToolStripButton.Click += new System.EventHandler(this.newToolStripButton_Click);
+            // 
+            // openToolStripButton
+            // 
+            this.openToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.openToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripButton.Image")));
+            this.openToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.openToolStripButton.Name = "openToolStripButton";
+            this.openToolStripButton.Size = new System.Drawing.Size(23, 24);
+            this.openToolStripButton.Text = "&Open";
+            this.openToolStripButton.Click += new System.EventHandler(this.openToolStripButton_Click);
+            // 
+            // saveToolStripButton
+            // 
+            this.saveToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.saveToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripButton.Image")));
+            this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveToolStripButton.Name = "saveToolStripButton";
+            this.saveToolStripButton.Size = new System.Drawing.Size(23, 24);
+            this.saveToolStripButton.Text = "&Save";
+            this.saveToolStripButton.Click += new System.EventHandler(this.saveToolStripButton_Click);
+            // 
             // cutToolStripButton1
             // 
             this.cutToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -207,6 +226,7 @@
             this.toolStripButtonRotateLeft.Name = "toolStripButtonRotateLeft";
             this.toolStripButtonRotateLeft.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonRotateLeft.Text = "Rotate Left";
+            this.toolStripButtonRotateLeft.Click += new System.EventHandler(this.toolStripButtonRotateLeft_Click);
             // 
             // toolStripButtonRotateRight
             // 
@@ -217,25 +237,6 @@
             this.toolStripButtonRotateRight.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonRotateRight.Text = "toolStripButtonRotateRight";
             this.toolStripButtonRotateRight.Click += new System.EventHandler(this.toolStripButtonRotateRight_Click);
-            // 
-            // panelPictureBox
-            // 
-            this.panelPictureBox.AutoScroll = true;
-            this.panelPictureBox.Controls.Add(this.pictureBox);
-            this.panelPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelPictureBox.Location = new System.Drawing.Point(0, 59);
-            this.panelPictureBox.Name = "panelPictureBox";
-            this.panelPictureBox.Size = new System.Drawing.Size(679, 378);
-            this.panelPictureBox.TabIndex = 11;
-            // 
-            // pictureBox
-            // 
-            this.pictureBox.BackColor = System.Drawing.SystemColors.Control;
-            this.pictureBox.Location = new System.Drawing.Point(4, 6);
-            this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(671, 369);
-            this.pictureBox.TabIndex = 7;
-            this.pictureBox.TabStop = false;
             // 
             // FormEditor
             // 

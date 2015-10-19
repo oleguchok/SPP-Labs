@@ -44,6 +44,7 @@
             this.buttonOk.TabIndex = 0;
             this.buttonOk.Text = "OK";
             this.buttonOk.UseVisualStyleBackColor = true;
+            this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
             // buttonCancel
             // 
@@ -53,6 +54,7 @@
             this.buttonCancel.TabIndex = 1;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // textBox1
             // 

@@ -224,13 +224,28 @@ namespace PhotoEditor
         #region Paint
         private void newToolStripButton_Click(object sender, EventArgs e)
         {
-            Bitmap Bmp = new Bitmap(600,400);
+            ShowNewEmptyImageForm();
+        }
+
+        private void ShowNewEmptyImageForm()
+        {
+            NewEmptyImageForm form = new NewEmptyImageForm();
+            DataExchanger.EventEmptyImageSizeHandler =
+                new DataExchanger.ExchangeEmptyImageSizeEvent(CreateEmtyImage);
+            form.ShowDialog();
+            form.Dispose();
+        }
+
+        private void CreateEmtyImage(int width, int height)
+        {
+            Bitmap Bmp = new Bitmap(width, height);
             using (Graphics gfx = Graphics.FromImage(Bmp))
             using (SolidBrush brush = new SolidBrush(Color.White))
             {
-                gfx.FillRectangle(brush, 0, 0, 600, 400);
+                gfx.FillRectangle(brush, 0, 0, width, height);
             }
             pictureBox.Image = Bmp;
+            originalImage = Bmp;
             PictureBoxLocation();
         }
 
