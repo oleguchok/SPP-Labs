@@ -222,9 +222,6 @@ namespace PhotoEditor
 
         #endregion
 
-
-            return rotatedBmp;
-        }
     }
 
 }
