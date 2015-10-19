@@ -185,7 +185,7 @@ namespace PhotoEditor
                 CalculateModifiedImageSize(zoom, zoom);
                 if (pictureBox.Image != null)
                 {
-                    RedrawPictureBoxImage();
+                    RedrawPictureBoxImage(originalImage, modifiedImageSize);
                     PictureBoxLocation();
                 }
             } catch (ArgumentException ex)
@@ -194,10 +194,10 @@ namespace PhotoEditor
             }
         }
 
-        private void RedrawPictureBoxImage()
+        private void RedrawPictureBoxImage(Image source, Size modifiedSize)
         {
-            Bitmap bm_source = new Bitmap(originalImage);
-            Bitmap bm_dest = new Bitmap(modifiedImageSize.Width, modifiedImageSize.Height,
+            Bitmap bm_source = new Bitmap(source);
+            Bitmap bm_dest = new Bitmap(modifiedSize.Width, modifiedSize.Height,
                     PixelFormat.Format24bppRgb);
             using (Graphics gr_dest = Graphics.FromImage(bm_dest))
             {
@@ -205,7 +205,7 @@ namespace PhotoEditor
                 gr_dest.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 gr_dest.SmoothingMode = SmoothingMode.HighQuality;
                 gr_dest.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width + 1, bm_dest.Height + 1);
+                gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width, bm_dest.Height);
             }
             InsertImageInPictureBox(pictureBox, bm_dest);
         }
@@ -236,19 +236,38 @@ namespace PhotoEditor
         private void ResizeImage(int widht, int height)
         {
             CalculateModifiedImageSize(widht, height);
-            RedrawPictureBoxImage();
+            RedrawPictureBoxImage(originalImage, modifiedImageSize);
             originalImage = pictureBox.Image;
             PictureBoxLocation();
         }
 
         #region Rotate Image
-        private void RotateImage(float angle)
+        private void toolStripButtonRotateRight_Click(object sender, EventArgs e)
         {
-            
-            originalImage = pictureBox.Image;
+            RotateImageOnFlip(RotateFlipType.Rotate90FlipNone);
+        }
+
+        private void toolStripButtonRotateLeft_Click(object sender, EventArgs e)
+        {
+            RotateImageOnFlip(RotateFlipType.Rotate270FlipNone);
+        }
+
+        private void RotateImageOnFlip(RotateFlipType flipType)
+        {
+            if (pictureBox.Image == null)
+                MessageBox.Show(@"Choose image");
+            else
+            {
+                pictureBox.Image.RotateFlip(flipType);
+                RedrawPictureBoxImage(pictureBox.Image, pictureBox.Image.Size);
+                PictureBoxLocation();
+                pictureBox.Refresh();
+            }
         }
 
         #endregion
+
+        
     }
 
 }
