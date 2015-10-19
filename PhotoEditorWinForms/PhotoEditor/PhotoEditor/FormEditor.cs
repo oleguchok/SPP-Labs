@@ -215,6 +215,7 @@ namespace PhotoEditor
             {
                 pictureBox.Image.RotateFlip(flipType);
                 RedrawPictureBoxImage(pictureBox.Image, pictureBox.Image.Size);
+                originalImage = pictureBox.Image;
                 PictureBoxLocation();
                 pictureBox.Refresh();
             }
