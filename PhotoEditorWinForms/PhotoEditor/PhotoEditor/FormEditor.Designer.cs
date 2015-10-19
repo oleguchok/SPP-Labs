@@ -366,6 +366,7 @@
             // 
             // pictureBox
             // 
+            this.pictureBox.BackColor = System.Drawing.SystemColors.Control;
             this.pictureBox.Location = new System.Drawing.Point(4, 6);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(671, 369);
