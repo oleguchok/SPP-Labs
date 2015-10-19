@@ -51,6 +51,12 @@
     <Compile Include="FormEditor.Designer.cs">
       <DependentUpon>FormEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="ModalForm\NewEmptyImageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ModalForm\NewEmptyImageForm.Designer.cs">
+      <DependentUpon>NewEmptyImageForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ModalForm\ResizeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -61,6 +67,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormEditor.resx">
       <DependentUpon>FormEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModalForm\NewEmptyImageForm.resx">
+      <DependentUpon>NewEmptyImageForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ModalForm\ResizeForm.resx">
       <DependentUpon>ResizeForm.cs</DependentUpon>

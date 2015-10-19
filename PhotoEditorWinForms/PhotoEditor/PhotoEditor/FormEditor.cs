@@ -221,7 +221,20 @@ namespace PhotoEditor
 
         #endregion
 
-        
+        #region Paint
+        private void newToolStripButton_Click(object sender, EventArgs e)
+        {
+            Bitmap Bmp = new Bitmap(600,400);
+            using (Graphics gfx = Graphics.FromImage(Bmp))
+            using (SolidBrush brush = new SolidBrush(Color.White))
+            {
+                gfx.FillRectangle(brush, 0, 0, 600, 400);
+            }
+            pictureBox.Image = Bmp;
+            PictureBoxLocation();
+        }
+
+        #endregion
     }
 
 }
