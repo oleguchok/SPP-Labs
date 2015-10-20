@@ -26,6 +26,16 @@ namespace PhotoEditor
         private Boolean isImageScaling = false;
         private Size modifiedImageSize;
         private Image originalImage;
+        private Image modifiedImage;
+
+        private float[][] colorMatrixElements =
+{
+                new float[] {1,0,0,0,0},
+                new float[] {0,1,0,0,0},
+                new float[] {0,0,1,0,0},
+                new float[] {0,0,0,1,0},
+                new float[] {0,0,0,0,1}
+            };
 
         public FormEditor()
         {
@@ -43,6 +53,8 @@ namespace PhotoEditor
                 pictureBox.Height = pictureBox.Image.Height;
                 pictureBox.Width = pictureBox.Image.Width;
                 originalImage = Image.FromFile(ofd.FileName);
+                modifiedImage = Image.FromFile(ofd.FileName);
+                modifiedImageSize = originalImage.Size;
                 PictureBoxLocation();                
             }  
         }
@@ -215,7 +227,6 @@ namespace PhotoEditor
             {
                 pictureBox.Image.RotateFlip(flipType);
                 RedrawPictureBoxImage(pictureBox.Image, pictureBox.Image.Size);
-                originalImage = pictureBox.Image;
                 PictureBoxLocation();
                 pictureBox.Refresh();
             }
@@ -252,6 +263,73 @@ namespace PhotoEditor
         }
 
         #endregion
+
+        private void trackBarBrightness_Scroll(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+            {
+                MessageBox.Show(@"Choose image");
+                return;
+            }
+            float v = trackBarBrightness.Value * 0.01f;
+            colorMatrixElements[4][0] = v;
+            colorMatrixElements[4][1] = v;
+            colorMatrixElements[4][2] = v;
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+            ImageAttributes imageAttributes = new ImageAttributes();
+            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+            Graphics g = Graphics.FromImage(modifiedImage);
+            g.DrawImage(originalImage, new Rectangle(0, 0, originalImage.Width, originalImage.Height), 0, 0,
+                originalImage.Width, originalImage.Height, GraphicsUnit.Pixel, imageAttributes);
+            RedrawPictureBoxImage(modifiedImage, modifiedImageSize);
+        }
+
+        private void trackBarContrast_Scroll(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+            {
+                MessageBox.Show(@"Choose image");
+                return;
+            }
+            float v = trackBarContrast.Value * 0.01f;
+            colorMatrixElements[0][0] = v;
+            colorMatrixElements[1][1] = v;
+            colorMatrixElements[2][2] = v;
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+            ImageAttributes imageAttributes = new ImageAttributes();
+
+            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+            Graphics g = Graphics.FromImage(modifiedImage);
+            g.DrawImage(originalImage, new Rectangle(0, 0, originalImage.Width, originalImage.Height), 0, 0,
+                originalImage.Width, originalImage.Height, GraphicsUnit.Pixel, imageAttributes);
+            RedrawPictureBoxImage(modifiedImage, modifiedImageSize);
+        }
+
+        private void toolStripButtonAccept_Click(object sender, EventArgs e)
+        {
+            originalImage = (Image)modifiedImage.Clone();
+            ClearColorMatrix();
+            trackBarBrightness.Value = 0;
+            trackBarContrast.Value = 100;
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            RedrawPictureBoxImage(originalImage, modifiedImageSize);
+            ClearColorMatrix();
+            trackBarBrightness.Value = 0;
+            trackBarContrast.Value = 100;
+        }
+
+        private void ClearColorMatrix()
+        {
+            colorMatrixElements.Initialize();
+            colorMatrixElements[0][0] = 1;
+            colorMatrixElements[1][1] = 1;
+            colorMatrixElements[2][2] = 1;
+        }
     }
 
 }
