@@ -305,7 +305,7 @@
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(23, 38);
             this.toolStripButton2.Text = "toolStripButtonCancel";
-            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButtonCancel_Click);
             // 
             // panelPictureBox
             // 

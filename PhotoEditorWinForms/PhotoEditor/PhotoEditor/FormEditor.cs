@@ -315,7 +315,7 @@ namespace PhotoEditor
             trackBarContrast.Value = 100;
         }
 
-        private void toolStripButton2_Click(object sender, EventArgs e)
+        private void toolStripButtonCancel_Click(object sender, EventArgs e)
         {
             RedrawPictureBoxImage(originalImage, modifiedImageSize);
             ClearColorMatrix();
@@ -329,6 +329,8 @@ namespace PhotoEditor
             colorMatrixElements[0][0] = 1;
             colorMatrixElements[1][1] = 1;
             colorMatrixElements[2][2] = 1;
+            colorMatrixElements[3][3] = 1;
+            colorMatrixElements[4][4] = 1;
         }
     }
 
