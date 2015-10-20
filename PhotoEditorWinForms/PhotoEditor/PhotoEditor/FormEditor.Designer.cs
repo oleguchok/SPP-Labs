@@ -38,6 +38,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tabPageImage = new System.Windows.Forms.TabPage();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.panelPictureBox = new System.Windows.Forms.Panel();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -47,6 +48,8 @@
             this.toolStripButtonResize = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRotateLeft = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRotateRight = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonPen = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonDefaultCursor = new System.Windows.Forms.ToolStripButton();
             this.tabControl.SuspendLayout();
             this.tabPageFile.SuspendLayout();
             this.toolStripFile.SuspendLayout();
@@ -143,12 +146,20 @@
             this.cutToolStripButton1,
             this.toolStripButtonResize,
             this.toolStripButtonRotateLeft,
-            this.toolStripButtonRotateRight});
+            this.toolStripButtonRotateRight,
+            this.toolStripSeparator2,
+            this.toolStripButtonPen,
+            this.toolStripButtonDefaultCursor});
             this.toolStrip1.Location = new System.Drawing.Point(3, 3);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(665, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // panelPictureBox
             // 
@@ -168,6 +179,10 @@
             this.pictureBox.Size = new System.Drawing.Size(671, 369);
             this.pictureBox.TabIndex = 7;
             this.pictureBox.TabStop = false;
+            this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
+            this.pictureBox.MouseLeave += new System.EventHandler(this.pictureBox_MouseLeave);
+            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
+            this.pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
             // 
             // newToolStripButton
             // 
@@ -238,6 +253,26 @@
             this.toolStripButtonRotateRight.Text = "toolStripButtonRotateRight";
             this.toolStripButtonRotateRight.Click += new System.EventHandler(this.toolStripButtonRotateRight_Click);
             // 
+            // toolStripButtonPen
+            // 
+            this.toolStripButtonPen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonPen.Image = global::PhotoEditor.Properties.Resources.pencil43;
+            this.toolStripButtonPen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonPen.Name = "toolStripButtonPen";
+            this.toolStripButtonPen.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonPen.Text = "Pen";
+            this.toolStripButtonPen.Click += new System.EventHandler(this.toolStripButtonPen_Click);
+            // 
+            // toolStripButtonDefaultCursor
+            // 
+            this.toolStripButtonDefaultCursor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonDefaultCursor.Image = global::PhotoEditor.Properties.Resources.cursor__1_;
+            this.toolStripButtonDefaultCursor.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonDefaultCursor.Name = "toolStripButtonDefaultCursor";
+            this.toolStripButtonDefaultCursor.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonDefaultCursor.Text = "Default Cursor";
+            this.toolStripButtonDefaultCursor.Click += new System.EventHandler(this.toolStripButtonDefaultCursor_Click);
+            // 
             // FormEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -284,6 +319,9 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonResize;
         private System.Windows.Forms.ToolStripButton toolStripButtonRotateLeft;
         private System.Windows.Forms.ToolStripButton toolStripButtonRotateRight;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton toolStripButtonPen;
+        private System.Windows.Forms.ToolStripButton toolStripButtonDefaultCursor;
 
     }
 }

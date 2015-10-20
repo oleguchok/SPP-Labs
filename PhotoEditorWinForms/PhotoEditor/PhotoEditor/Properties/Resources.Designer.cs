@@ -63,6 +63,16 @@ namespace PhotoEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cursor__1_ {
+            get {
+                object obj = ResourceManager.GetObject("cursor (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap gnome_object_rotate_left {
             get {
                 object obj = ResourceManager.GetObject("gnome_object_rotate_left", resourceCulture);
@@ -86,6 +96,16 @@ namespace PhotoEditor.Properties {
         internal static System.Drawing.Bitmap icon_64x64 {
             get {
                 object obj = ResourceManager.GetObject("icon_64x64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pencil43 {
+            get {
+                object obj = ResourceManager.GetObject("pencil43", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

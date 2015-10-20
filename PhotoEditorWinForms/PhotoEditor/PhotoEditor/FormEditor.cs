@@ -1,4 +1,5 @@
-﻿using PhotoEditor.ModalForm;
+﻿using System.Runtime.InteropServices;
+using PhotoEditor.ModalForm;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,15 +18,17 @@ using System.Windows.Forms;
 
 namespace PhotoEditor
 {
-    //TEESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
     public partial class FormEditor : Form
     {
         private static readonly String IMAGE_FORMATS = 
             "jpg (*.jpg)|*.jpg|bmp (*.bmp)|*.bmp|png (*.png)|*.png";
 
         private Boolean isImageScaling = false;
+        private bool isPencil = false;
         private Size modifiedImageSize;
         private Image originalImage;
+        private Point latestPositionToDraw;
+        private List<Point> pointsToDraw = new List<Point>();
 
         public FormEditor()
         {
@@ -249,6 +252,63 @@ namespace PhotoEditor
             pictureBox.Image = Bmp;
             originalImage = Bmp;
             PictureBoxLocation();
+        }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr LoadCursorFromFile(string lpFileName);
+        
+        private void toolStripButtonPen_Click(object sender, EventArgs e)
+        {
+            if (pictureBox.Image != null)
+                isPencil = true;
+        }
+
+        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isPencil)
+            {
+                IntPtr hCursor = LoadCursorFromFile("cur1046.cur");
+                Cursor cursor = new Cursor(hCursor);
+                Cursor = cursor;
+                if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
+                {
+                    pointsToDraw.Add(e.Location);
+                    using (Graphics grp = Graphics.FromImage(originalImage))
+                    {
+                        if (pointsToDraw.Count > 1)
+                            grp.DrawLines(Pens.Black, pointsToDraw.ToArray());
+                    }
+                    pictureBox.Image = originalImage;
+                    pictureBox.Refresh();
+                    pictureBox.Invalidate();
+                }
+            }
+        }
+
+        private void pictureBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (isPencil && (e.Button & MouseButtons.Left) == MouseButtons.Left)
+            {
+                pointsToDraw.Add(e.Location);
+            }
+        }
+
+        private void pictureBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (isPencil)
+            {
+                pointsToDraw.Clear();
+            }
+        }
+
+        private void pictureBox_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = DefaultCursor;
+        }
+
+        private void toolStripButtonDefaultCursor_Click(object sender, EventArgs e)
+        {
+            isPencil = false;
         }
 
         #endregion
