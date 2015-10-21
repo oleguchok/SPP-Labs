@@ -42,23 +42,27 @@ namespace PhotoEditor
             this.toolStripComboBoxZoom = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tabPageImage = new System.Windows.Forms.TabPage();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.panelPictureBox = new System.Windows.Forms.Panel();
-            this.pictureBox = new System.Windows.Forms.PictureBox();
             this.toolStripImage = new System.Windows.Forms.ToolStrip();
             this.cutToolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonResize = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRotateLeft = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRotateRight = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonChangeColors = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonPen = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonDefaultCursor = new System.Windows.Forms.ToolStripButton();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.trackBarContrast = new System.Windows.Forms.TrackBar();
             this.trackBarBrightness = new System.Windows.Forms.TrackBar();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.panelPictureBox = new System.Windows.Forms.Panel();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.toolStripButtonChangeColors = new System.Windows.Forms.ToolStripButton();
+            this.trackBarColor = new System.Windows.Forms.TrackBar();
+            this.checkBoxRed = new System.Windows.Forms.CheckBox();
+            this.checkBoxBlue = new System.Windows.Forms.CheckBox();
+            this.checkBoxGreen = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageFile.SuspendLayout();
             this.toolStripFile.SuspendLayout();
@@ -70,6 +74,7 @@ namespace PhotoEditor
             this.toolStrip1.SuspendLayout();
             this.panelPictureBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarColor)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -195,39 +200,10 @@ namespace PhotoEditor
             this.toolStripSeparator2,
             this.toolStripButtonPen,
             this.toolStripButtonDefaultCursor});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 3);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(665, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // panelPictureBox
-            // 
-            this.panelPictureBox.AutoScroll = true;
-            this.panelPictureBox.Controls.Add(this.pictureBox);
-            this.panelPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelPictureBox.Location = new System.Drawing.Point(0, 59);
-            this.panelPictureBox.Name = "panelPictureBox";
-            this.panelPictureBox.Size = new System.Drawing.Size(679, 378);
-            this.panelPictureBox.TabIndex = 11;
-            // 
-            // pictureBox
-            // 
-            this.pictureBox.BackColor = System.Drawing.SystemColors.Control;
-            this.pictureBox.Location = new System.Drawing.Point(4, 6);
-            this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(671, 369);
-            this.pictureBox.TabIndex = 7;
-            this.pictureBox.TabStop = false;
-            this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
-            this.pictureBox.MouseLeave += new System.EventHandler(this.pictureBox_MouseLeave);
-            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
-            this.pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
+            this.toolStripImage.Location = new System.Drawing.Point(3, 3);
+            this.toolStripImage.Name = "toolStripImage";
+            this.toolStripImage.Size = new System.Drawing.Size(665, 41);
+            this.toolStripImage.TabIndex = 0;
             // 
             // cutToolStripButton1
             // 
@@ -237,6 +213,7 @@ namespace PhotoEditor
             this.cutToolStripButton1.Name = "cutToolStripButton1";
             this.cutToolStripButton1.Size = new System.Drawing.Size(23, 38);
             this.cutToolStripButton1.Text = "C&ut";
+            this.cutToolStripButton1.Click += new System.EventHandler(this.cutToolStripButton1_Click);
             // 
             // toolStripButtonResize
             // 
@@ -268,18 +245,38 @@ namespace PhotoEditor
             this.toolStripButtonRotateRight.Text = "toolStripButtonRotateRight";
             this.toolStripButtonRotateRight.Click += new System.EventHandler(this.toolStripButtonRotateRight_Click);
             // 
-            // toolStripButtonChangeColors
+            // toolStripSeparator2
             // 
-            this.toolStripButtonChangeColors.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonChangeColors.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonChangeColors.Image")));
-            this.toolStripButtonChangeColors.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonChangeColors.Name = "toolStripButtonChangeColors";
-            this.toolStripButtonChangeColors.Size = new System.Drawing.Size(23, 38);
-            this.toolStripButtonChangeColors.Text = "toolStripButton1";
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 41);
+            // 
+            // toolStripButtonPen
+            // 
+            this.toolStripButtonPen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonPen.Image = global::PhotoEditor.Properties.Resources.pencil43;
+            this.toolStripButtonPen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonPen.Name = "toolStripButtonPen";
+            this.toolStripButtonPen.Size = new System.Drawing.Size(23, 38);
+            this.toolStripButtonPen.Text = "Pen";
+            this.toolStripButtonPen.Click += new System.EventHandler(this.toolStripButtonPen_Click);
+            // 
+            // toolStripButtonDefaultCursor
+            // 
+            this.toolStripButtonDefaultCursor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonDefaultCursor.Image = global::PhotoEditor.Properties.Resources.cursor__1_;
+            this.toolStripButtonDefaultCursor.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonDefaultCursor.Name = "toolStripButtonDefaultCursor";
+            this.toolStripButtonDefaultCursor.Size = new System.Drawing.Size(23, 38);
+            this.toolStripButtonDefaultCursor.Text = "Default Cursor";
+            this.toolStripButtonDefaultCursor.Click += new System.EventHandler(this.toolStripButtonDefaultCursor_Click);
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.checkBoxGreen);
+            this.tabPage1.Controls.Add(this.checkBoxBlue);
+            this.tabPage1.Controls.Add(this.checkBoxRed);
             this.tabPage1.Controls.Add(this.trackBarContrast);
+            this.tabPage1.Controls.Add(this.trackBarColor);
             this.tabPage1.Controls.Add(this.trackBarBrightness);
             this.tabPage1.Controls.Add(this.toolStrip1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -360,26 +357,60 @@ namespace PhotoEditor
             this.pictureBox.Size = new System.Drawing.Size(671, 369);
             this.pictureBox.TabIndex = 7;
             this.pictureBox.TabStop = false;
+            this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
+            this.pictureBox.MouseLeave += new System.EventHandler(this.pictureBox_MouseLeave);
+            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
+            this.pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
             // 
-            // toolStripButtonPen
+            // toolStripButtonChangeColors
             // 
-            this.toolStripButtonPen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonPen.Image = global::PhotoEditor.Properties.Resources.pencil43;
-            this.toolStripButtonPen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonPen.Name = "toolStripButtonPen";
-            this.toolStripButtonPen.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonPen.Text = "Pen";
-            this.toolStripButtonPen.Click += new System.EventHandler(this.toolStripButtonPen_Click);
+            this.toolStripButtonChangeColors.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonChangeColors.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonChangeColors.Image")));
+            this.toolStripButtonChangeColors.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonChangeColors.Name = "toolStripButtonChangeColors";
+            this.toolStripButtonChangeColors.Size = new System.Drawing.Size(23, 38);
+            this.toolStripButtonChangeColors.Text = "toolStripButton1";
             // 
-            // toolStripButtonDefaultCursor
+            // trackBarColor
             // 
-            this.toolStripButtonDefaultCursor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonDefaultCursor.Image = global::PhotoEditor.Properties.Resources.cursor__1_;
-            this.toolStripButtonDefaultCursor.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonDefaultCursor.Name = "toolStripButtonDefaultCursor";
-            this.toolStripButtonDefaultCursor.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonDefaultCursor.Text = "Default Cursor";
-            this.toolStripButtonDefaultCursor.Click += new System.EventHandler(this.toolStripButtonDefaultCursor_Click);
+            this.trackBarColor.Location = new System.Drawing.Point(309, -1);
+            this.trackBarColor.Maximum = 300;
+            this.trackBarColor.Minimum = -100;
+            this.trackBarColor.Name = "trackBarColor";
+            this.trackBarColor.Size = new System.Drawing.Size(104, 45);
+            this.trackBarColor.TabIndex = 2;
+            this.trackBarColor.Value = 100;
+            this.trackBarColor.Scroll += new System.EventHandler(this.trackBarColor_Scroll);
+            // 
+            // checkBoxRed
+            // 
+            this.checkBoxRed.AutoSize = true;
+            this.checkBoxRed.Location = new System.Drawing.Point(419, 15);
+            this.checkBoxRed.Name = "checkBoxRed";
+            this.checkBoxRed.Size = new System.Drawing.Size(46, 17);
+            this.checkBoxRed.TabIndex = 3;
+            this.checkBoxRed.Text = "Red";
+            this.checkBoxRed.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxBlue
+            // 
+            this.checkBoxBlue.AutoSize = true;
+            this.checkBoxBlue.Location = new System.Drawing.Point(532, 15);
+            this.checkBoxBlue.Name = "checkBoxBlue";
+            this.checkBoxBlue.Size = new System.Drawing.Size(47, 17);
+            this.checkBoxBlue.TabIndex = 3;
+            this.checkBoxBlue.Text = "Blue";
+            this.checkBoxBlue.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxGreen
+            // 
+            this.checkBoxGreen.AutoSize = true;
+            this.checkBoxGreen.Location = new System.Drawing.Point(471, 15);
+            this.checkBoxGreen.Name = "checkBoxGreen";
+            this.checkBoxGreen.Size = new System.Drawing.Size(55, 17);
+            this.checkBoxGreen.TabIndex = 3;
+            this.checkBoxGreen.Text = "Green";
+            this.checkBoxGreen.UseVisualStyleBackColor = true;
             // 
             // FormEditor
             // 
@@ -409,6 +440,7 @@ namespace PhotoEditor
             this.toolStrip1.PerformLayout();
             this.panelPictureBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarColor)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -444,6 +476,10 @@ namespace PhotoEditor
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.TrackBar trackBarContrast;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.CheckBox checkBoxGreen;
+        private System.Windows.Forms.CheckBox checkBoxBlue;
+        private System.Windows.Forms.CheckBox checkBoxRed;
+        private System.Windows.Forms.TrackBar trackBarColor;
     }
 }
 

@@ -29,6 +29,10 @@ namespace PhotoEditor
         private Image originalImage;
         private List<Point> pointsToDraw = new List<Point>();
         private Image modifiedImage;
+        private PictureBox pictureBoxForCut;
+        private Point firstPointCut;
+        private Point secondPointCut;
+        private Boolean isCut = false;
 
         private float[][] colorMatrixElements =
 {
@@ -50,12 +54,17 @@ namespace PhotoEditor
             ofd.Filter = IMAGE_FORMATS;
 
             if (ofd.ShowDialog() == DialogResult.OK && ofd.FileName.Length > 0)
-            {          
-                pictureBox.Image = Image.FromFile(ofd.FileName);
+            {
+                //pictureBox.Image = Image.FromFile(ofd.FileName);
+                using (FileStream fs = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read))
+                {
+                    originalImage = Image.FromStream(fs);
+                    modifiedImage = Image.FromStream(fs);
+                    pictureBox.Image = Image.FromStream(fs);
+                }
+
                 pictureBox.Height = pictureBox.Image.Height;
                 pictureBox.Width = pictureBox.Image.Width;
-                originalImage = Image.FromFile(ofd.FileName);
-                modifiedImage = Image.FromFile(ofd.FileName);
                 modifiedImageSize = originalImage.Size;
                 PictureBoxLocation();                
             }  
@@ -84,7 +93,9 @@ namespace PhotoEditor
             if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0)
             {
                 if (!isImageScaling)
+                {
                     pictureBox.Image.Save(sfd.FileName);
+                }
                 else
                     originalImage.Save(sfd.FileName);
             }
@@ -319,6 +330,8 @@ namespace PhotoEditor
         private void toolStripButtonDefaultCursor_Click(object sender, EventArgs e)
         {
             isPencil = false;
+            isCut = false;
+            pictureBoxForCut.Enabled = false;
         }
 
         #endregion
@@ -334,14 +347,34 @@ namespace PhotoEditor
             colorMatrixElements[4][0] = v;
             colorMatrixElements[4][1] = v;
             colorMatrixElements[4][2] = v;
-            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
-            ImageAttributes imageAttributes = new ImageAttributes();
-            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            ChangeAttributesOfImage();
+        }
 
-            Graphics g = Graphics.FromImage(modifiedImage);
-            g.DrawImage(originalImage, new Rectangle(0, 0, originalImage.Width, originalImage.Height), 0, 0,
-                originalImage.Width, originalImage.Height, GraphicsUnit.Pixel, imageAttributes);
-            RedrawPictureBoxImage(modifiedImage, modifiedImageSize);
+        private void trackBarColor_Scroll(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+            {
+                MessageBox.Show(@"Choose image");
+                return;
+            }
+            if (checkBoxRed.Checked)
+            {
+                float v = trackBarColor.Value * 0.01f;
+                colorMatrixElements[0][0] = v;
+                ChangeAttributesOfImage();
+            }
+            if (checkBoxGreen.Checked)
+            {
+                float v = trackBarColor.Value * 0.01f;
+                colorMatrixElements[1][1] = v;
+                ChangeAttributesOfImage();
+            }
+            if (checkBoxBlue.Checked)
+            {
+                float v = trackBarColor.Value * 0.01f;
+                colorMatrixElements[2][2] = v;
+                ChangeAttributesOfImage();
+            }
         }
 
         private void trackBarContrast_Scroll(object sender, EventArgs e)
@@ -355,6 +388,11 @@ namespace PhotoEditor
             colorMatrixElements[0][0] = v;
             colorMatrixElements[1][1] = v;
             colorMatrixElements[2][2] = v;
+            ChangeAttributesOfImage();
+        }
+
+        private void ChangeAttributesOfImage()
+        {
             ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
             ImageAttributes imageAttributes = new ImageAttributes();
 
@@ -372,6 +410,10 @@ namespace PhotoEditor
             ClearColorMatrix();
             trackBarBrightness.Value = 0;
             trackBarContrast.Value = 100;
+            trackBarColor.Value = 100;
+            checkBoxRed.Checked = false;
+            checkBoxGreen.Checked = false;
+            checkBoxBlue.Checked = false;
         }
 
         private void toolStripButtonCancel_Click(object sender, EventArgs e)
@@ -380,6 +422,10 @@ namespace PhotoEditor
             ClearColorMatrix();
             trackBarBrightness.Value = 0;
             trackBarContrast.Value = 100;
+            trackBarColor.Value = 100;
+            checkBoxRed.Checked = false;
+            checkBoxGreen.Checked = false;
+            checkBoxBlue.Checked = false;
         }
 
         private void ClearColorMatrix()
@@ -390,6 +436,113 @@ namespace PhotoEditor
             colorMatrixElements[2][2] = 1;
             colorMatrixElements[3][3] = 1;
             colorMatrixElements[4][4] = 1;
+        }
+
+        private void cutToolStripButton1_Click(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+            {
+                MessageBox.Show(@"Choose image");
+                return;
+            }
+            if (isCut == false)
+            {
+                modifiedImageSize = originalImage.Size;
+                RedrawPictureBoxImage(originalImage, modifiedImageSize);
+                if (pictureBoxForCut == null)
+                {
+                    pictureBoxForCut = new PictureBox
+                    {
+                        Size = pictureBox.Size,
+                        Location = new Point(0, 0),
+                        BackColor = Color.Transparent,
+                        Cursor = Cursors.Cross
+                    };
+                    pictureBox.Controls.Add(pictureBoxForCut);
+                    pictureBoxForCut.MouseDown += PictureBoxForCut_MouseDown;
+                    pictureBoxForCut.MouseUp += PictureBoxForCut_MouseUp;
+                    pictureBoxForCut.MouseMove += PictureBoxForCut_MouseMove;
+                    pictureBoxForCut.DoubleClick += PictureBoxForCut_DoubleClick;
+                    pictureBoxForCut.DragOver += PictureBoxForCut_DragOver;
+                }
+                else
+                {
+                    pictureBoxForCut.Enabled = true;
+                }
+                isCut = true;
+            }
+            else
+            {
+                CorrectPointOfRectangle(ref firstPointCut, ref secondPointCut);
+                Bitmap bmp = originalImage as Bitmap;
+                originalImage = null;
+                originalImage = bmp.Clone(
+                    new Rectangle
+                    (
+                        firstPointCut.X,
+                        firstPointCut.Y,
+                        secondPointCut.X - firstPointCut.X,
+                        secondPointCut.Y - firstPointCut.Y
+                    ), bmp.PixelFormat);
+                modifiedImageSize = originalImage.Size;
+                RedrawPictureBoxImage(originalImage, modifiedImageSize);
+
+                isCut = false;
+                pictureBoxForCut.Enabled = false;
+            }
+
+        }
+
+        private void PictureBoxForCut_MouseDown(object sender, MouseEventArgs e)
+        {
+            firstPointCut = e.Location;
+        }
+
+        private void PictureBoxForCut_MouseUp(object sender, MouseEventArgs e)
+        {
+            secondPointCut = e.Location;
+        }
+
+        private void PictureBoxForCut_DragOver(object sender, DragEventArgs e)
+        {
+            pictureBoxForCut.Enabled = false;
+        }
+
+        private void PictureBoxForCut_DoubleClick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PictureBoxForCut_MouseMove(object sender, MouseEventArgs e)
+        {
+            if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
+            {
+                RedrawCutRectangle(firstPointCut, e.Location);
+            }
+        }
+
+        private void RedrawCutRectangle(Point p1, Point p2)
+        {
+            CorrectPointOfRectangle(ref p1, ref p2);
+            pictureBoxForCut.Image = null;
+            Graphics g = pictureBoxForCut.CreateGraphics();
+            g.DrawRectangle(new Pen(Color.Red), p1.X, p1.Y, p2.X - p1.X, p2.Y - p1.Y);
+        }
+
+        private void CorrectPointOfRectangle(ref Point p1, ref Point p2)
+        {
+            if (p1.X > p2.X)
+            {
+                int tmp = p1.X;
+                p1.X = p2.X;
+                p2.X = tmp;
+            }
+            if (p1.Y > p2.Y)
+            {
+                int tmp = p1.Y;
+                p1.Y = p2.Y;
+                p2.Y = tmp;
+            }
         }
     }
 
