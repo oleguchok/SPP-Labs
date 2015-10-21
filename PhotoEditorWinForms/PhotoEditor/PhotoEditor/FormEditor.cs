@@ -27,7 +27,6 @@ namespace PhotoEditor
         private bool isPencil = false;
         private Size modifiedImageSize;
         private Image originalImage;
-        private Point latestPositionToDraw;
         private List<Point> pointsToDraw = new List<Point>();
         private Image modifiedImage;
 
@@ -120,7 +119,7 @@ namespace PhotoEditor
         private void CalculateModifiedImageSize(int widthZoom, int heightZoom)
         {
             if (originalImage == null)
-                throw new ArgumentNullException("Image", "Choose image");
+                throw new ArgumentNullException("Image", @"Choose image");
             modifiedImageSize = new Size((originalImage.Width * widthZoom) / 100,
                     (originalImage.Height * heightZoom) / 100);
         }
@@ -284,12 +283,12 @@ namespace PhotoEditor
                 if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
                 {
                     pointsToDraw.Add(e.Location);
-                    using (Graphics grp = Graphics.FromImage(originalImage))
+                    using (Graphics grp = Graphics.FromImage(pictureBox.Image))
                     {
                         if (pointsToDraw.Count > 1)
                             grp.DrawLines(Pens.Black, pointsToDraw.ToArray());
                     }
-                    pictureBox.Image = originalImage;
+                    originalImage = pictureBox.Image;
                     pictureBox.Refresh();
                     pictureBox.Invalidate();
                 }
