@@ -104,9 +104,12 @@ namespace ImageViewer
 
         private void ListBoxImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            IList addedItems = e.AddedItems;
-            var image = (ImageInViewer)addedItems[0];
-            ImgPhoto.Source = image.ImageSrc;
+            if (e.AddedItems.Count != 0)
+            {
+                IList addedItems = e.AddedItems;
+                var image = (ImageInViewer) addedItems[0];
+                ImgPhoto.Source = image.ImageSrc;
+            }
         }
         
     }

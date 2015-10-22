@@ -5,6 +5,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <BitmapImage x:Key="BrowseFolder" UriSource="Resources/folder265.png"/>
+            <BitmapImage x:Key="OpenImage" UriSource="Resources/image-128.png"/>
             <DataTemplate x:Key="ImageTemplate">
                 <StackPanel>
                     <Image Source="{Binding ImageSrc}" Width="150" Height="100"/>
@@ -25,9 +26,11 @@
                 </Button>
             </ToolBar>
             <ToolBar>
-                <Button HorizontalAlignment="Stretch" 
-                        Name="BtnLoad" Click="BtnLoad_Click">
-                    Load
+                <Button HorizontalAlignment="Stretch" Name="BtnLoad" Click="BtnLoad_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{StaticResource OpenImage}" Height="18" Width="19"/>
+                        <TextBlock>Open Image</TextBlock>
+                    </StackPanel>
                 </Button>
             </ToolBar>
         </ToolBarTray>
@@ -44,7 +47,7 @@
         </Grid>
         <Image Name="ImgPhoto" 
                Source="{Binding ElementName=ListBoxImages, Path=SelectedItem.ImageSrc}">
-            
+
         </Image>
 
     </DockPanel>
