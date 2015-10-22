@@ -26,17 +26,18 @@
                 <Separator></Separator>
             </ToolBar>
         </ToolBarTray>
-        
-        <StackPanel DockPanel.Dock="Left">
-            <Label Height="29" HorizontalAlignment="Left"
+
+        <Grid DockPanel.Dock="Left">
+            <Label VerticalAlignment="Top" HorizontalAlignment="Left"
         		    x:Name="FolderNameLabel"  Width="188"
         		    Background="LightGray" BorderBrush="Gray" BorderThickness="1"
-                   Content="{Binding OpenFolderPath}"/>
+                   Content="{Binding OpenFolderPath}" Margin="0,1,0,0" Height="29"/>
             <ListBox ItemsSource="{Binding AllImages}"
                      ItemTemplate="{StaticResource ImageTemplate}"
-                     VerticalAlignment="Stretch" DockPanel.Dock="Left" Width="188" Height="670"/>
-        </StackPanel>
-        
+                     VerticalAlignment="Stretch" Width="188"
+                     Name="ListBoxImages" Margin="0,30,0,0"/>
+        </Grid>
+
         <Image Margin="12,12,16,71" Name="imgPhoto" 
         Stretch="Fill" RenderTransformOrigin="0.5,0.5" >
             <Image.RenderTransform>

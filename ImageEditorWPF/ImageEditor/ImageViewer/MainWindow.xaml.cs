@@ -26,8 +26,6 @@ namespace ImageViewer
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string OpenFolderPath { get; set; }
-
         public MainWindow()
         {
             InitializeComponent();
@@ -35,6 +33,33 @@ namespace ImageViewer
                 Environment.SpecialFolder.MyPictures);
             DataContext = this;
         }
+
+        #region Properties
+        public string OpenFolderPath { get; set; }
+
+        public List<ImageInViewer> AllImages
+        {
+            get
+            {
+                var result = new List<ImageInViewer>();
+                foreach (string filename in
+                    Directory.GetFiles(OpenFolderPath))
+                {
+                    try
+                    {
+                        result.Add(
+                            new ImageInViewer(
+                            new BitmapImage(
+                            new Uri(filename)),
+                            System.IO.Path.GetFileNameWithoutExtension(filename)));
+                    }
+                    catch { }
+                }
+                return result;
+            }
+        }
+
+        #endregion
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
@@ -66,30 +91,16 @@ namespace ImageViewer
 
         private void ButtonOpenFolder_OnClick(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            DialogResult result = fbd.ShowDialog();
-        }
-
-        public List<ImageInViewer> AllImages
-        {
-            get
+            var fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                List<ImageInViewer> result = new List<ImageInViewer>();
-                foreach (string filename in
-                    System.IO.Directory.GetFiles(OpenFolderPath))
-                {
-                    try
-                    {
-                        result.Add(
-                            new ImageInViewer(
-                            new BitmapImage(
-                            new Uri(filename)),
-                            System.IO.Path.GetFileNameWithoutExtension(filename)));
-                    }
-                    catch { }
-                }
-                return result;
+                OpenFolderPath = fbd.SelectedPath;
+                FolderNameLabel.Content = OpenFolderPath;
+                var dplb = ListBoxImages.GetBindingExpression(ItemsControl.ItemsSourceProperty);
+                dplb.UpdateTarget();
             }
         }
+
+        
     }
 }
