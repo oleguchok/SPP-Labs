@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageEditor", "ImageEditor\ImageEditor.csproj", "{745464F7-7931-4F65-955A-D00932B0416C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageViewer", "ImageViewer\ImageViewer.csproj", "{20B743DC-3CCF-4E4B-8A82-7478439CBD0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{745464F7-7931-4F65-955A-D00932B0416C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{745464F7-7931-4F65-955A-D00932B0416C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{745464F7-7931-4F65-955A-D00932B0416C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{745464F7-7931-4F65-955A-D00932B0416C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20B743DC-3CCF-4E4B-8A82-7478439CBD0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20B743DC-3CCF-4E4B-8A82-7478439CBD0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20B743DC-3CCF-4E4B-8A82-7478439CBD0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20B743DC-3CCF-4E4B-8A82-7478439CBD0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
