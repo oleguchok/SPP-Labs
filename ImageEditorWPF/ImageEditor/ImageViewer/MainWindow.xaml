@@ -23,38 +23,29 @@
                         <TextBlock>Open Folder</TextBlock>
                     </StackPanel>
                 </Button>
-                <Separator></Separator>
+            </ToolBar>
+            <ToolBar>
+                <Button HorizontalAlignment="Stretch" 
+                        Name="BtnLoad" Click="BtnLoad_Click">
+                    Load
+                </Button>
             </ToolBar>
         </ToolBarTray>
 
-        <Grid DockPanel.Dock="Left">
-            <Label VerticalAlignment="Top" HorizontalAlignment="Left"
-        		    x:Name="FolderNameLabel"  Width="188"
-        		    Background="LightGray" BorderBrush="Gray" BorderThickness="1"
-                   Content="{Binding OpenFolderPath}" Margin="0,1,0,0" Height="29"/>
+        <Grid DockPanel.Dock="Left" HorizontalAlignment="Stretch">
+            <Label VerticalAlignment="Top" HorizontalAlignment="Stretch"
+        		   x:Name="FolderNameLabel" Background="LightGray" BorderBrush="Gray"
+                   BorderThickness="1" Content="{Binding OpenFolderPath}" Margin="0,1,0,0"
+                   Height="29"/>
             <ListBox ItemsSource="{Binding AllImages}"
                      ItemTemplate="{StaticResource ImageTemplate}"
-                     VerticalAlignment="Stretch" Width="188"
-                     Name="ListBoxImages" Margin="0,30,0,0"/>
+                     VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                     Name="ListBoxImages" Margin="0,30,0,0" SelectionChanged="ListBoxImages_SelectionChanged"/>
         </Grid>
-
-        <Image Margin="12,12,16,71" Name="imgPhoto" 
-        Stretch="Fill" RenderTransformOrigin="0.5,0.5" >
-            <Image.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="0.005"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Image.RenderTransform>
+        <Image Name="ImgPhoto" 
+               Source="{Binding ElementName=ListBoxImages, Path=SelectedItem.ImageSrc}">
+            
         </Image>
-        <Button Height="23" HorizontalAlignment="Left" 
-        Margin="12,0,0,34" Name="btnLoad" VerticalAlignment="Bottom" 
-        Width="75" Click="btnLoad_Click">_Load</Button>
-        <Button Name="btnSave" Height="23"
-        Width="75" Margin="92,0,0,34" VerticalAlignment="Bottom"
-                HorizontalAlignment="Left" Click="btnSave_Click">_Save</Button>
 
     </DockPanel>
 </Window>

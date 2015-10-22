@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Collections;
+using System.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,6 +27,10 @@ namespace ImageViewer
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly string filterToImages = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+              "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+              "Portable Network Graphic (*.png)|*.png";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -61,16 +66,14 @@ namespace ImageViewer
 
         #endregion
 
-        private void btnLoad_Click(object sender, RoutedEventArgs e)
+        private void BtnLoad_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog op = new OpenFileDialog();
             op.Title = "Select a picture";
-            op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
-              "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
-              "Portable Network Graphic (*.png)|*.png";
+            op.Filter = filterToImages;
             if (op.ShowDialog() == true)
             {
-                imgPhoto.Source = new BitmapImage(new Uri(op.FileName));
+                ImgPhoto.Source = new BitmapImage(new Uri(op.FileName));
             }
         }
 
@@ -78,12 +81,10 @@ namespace ImageViewer
         {
             SaveFileDialog sp = new SaveFileDialog();
             sp.Title = "Save a picture";
-            sp.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
-              "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
-              "Portable Network Graphic (*.png)|*.png";
+            sp.Filter = filterToImages;
             if (sp.ShowDialog() == true)
             {
-                Image image = imgPhoto;
+                Image image = ImgPhoto;
                 
                 
             }
@@ -101,6 +102,12 @@ namespace ImageViewer
             }
         }
 
+        private void ListBoxImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            IList addedItems = e.AddedItems;
+            var image = (ImageInViewer)addedItems[0];
+            ImgPhoto.Source = image.ImageSrc;
+        }
         
     }
 }
