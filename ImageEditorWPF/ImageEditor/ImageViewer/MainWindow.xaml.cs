@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,8 @@ using System.Windows.Shapes;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
-using ImageInViewer = ImageViewer.Model.Image; 
+using ImageInViewer = ImageViewer.Model.Image;
+using PixelFormat = System.Windows.Media.PixelFormat;
 
 namespace ImageViewer
 {
