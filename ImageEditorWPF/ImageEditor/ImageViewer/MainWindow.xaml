@@ -40,6 +40,9 @@
                     </StackPanel>
                 </Button>
             </ToolBar>
+            <ToolBar>
+                <Button Name="ButtonCrop" Visibility="Hidden" Click="ButtonCrop_Click">Crop</Button>
+            </ToolBar>
         </ToolBarTray>
 
         <Grid DockPanel.Dock="Left" HorizontalAlignment="Stretch">
@@ -53,12 +56,22 @@
                      Name="ListBoxImages" Margin="0,30,0,0" SelectionChanged="ListBoxImages_SelectionChanged"/>
         </Grid>
         <Slider DockPanel.Dock="Bottom" Name="AngleSlider" Minimum="0" Maximum="360" Height="20"/>
-        <Image Name="ImgPhoto" 
-               Source="{Binding ElementName=ListBoxImages, Path=SelectedItem.ImageSrc}">
+        <Canvas x:Name="BackPanel" Margin="20,67,0,0">
+            <Rectangle x:Name="selectionRectangle" Stroke="LightBlue" Fill="#220000FF" Visibility="Collapsed" />
+        </Canvas>
+        <Border ClipToBounds="True">
+        <Image Name="ImgPhoto" RenderTransformOrigin="0.5,0.5" 
+               Source="{Binding ElementName=ListBoxImages, Path=SelectedItem.ImageSrc}" 
+               MouseLeftButtonDown="ImgPhoto_MouseLeftButtonDown" MouseMove="ImgPhoto_MouseMove"
+               MouseLeftButtonUp="ImgPhoto_MouseLeftButtonUp" MouseWheel="ImgPhoto_MouseWheel">
+            <Image.RenderTransform>
+                <ScaleTransform/>
+            </Image.RenderTransform>
             <Image.LayoutTransform>
                 <RotateTransform Angle="{Binding ElementName=AngleSlider, Path=Value}"/>
             </Image.LayoutTransform>
         </Image>
-        
+        </Border>
+
     </DockPanel>
 </Window>

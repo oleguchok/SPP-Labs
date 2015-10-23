@@ -32,6 +32,9 @@ namespace ImageViewer
               "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
               "Portable Network Graphic (*.png)|*.png";
 
+        private bool isDragging = false;
+        private System.Windows.Point anchorPoint = new System.Windows.Point();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -150,6 +153,72 @@ namespace ImageViewer
             rtb.Render(dv);
             return rtb;
         }
+
+        #region Mouse Events
+        private void ImgPhoto_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (isDragging == false)
+            {
+                anchorPoint = e.GetPosition(BackPanel);
+                isDragging = true;
+            }
+        }
         
+        private void ImgPhoto_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (isDragging)
+            {
+                selectionRectangle.SetValue(Canvas.LeftProperty, Math.Min(e.GetPosition(BackPanel).X,
+                    anchorPoint.X));
+                selectionRectangle.SetValue(Canvas.TopProperty, Math.Min(e.GetPosition(BackPanel).Y,
+                    anchorPoint.Y));
+                selectionRectangle.Width = Math.Abs(e.GetPosition(BackPanel).X - anchorPoint.X);
+                selectionRectangle.Height = Math.Abs(e.GetPosition(BackPanel).Y - anchorPoint.Y);
+
+                if (selectionRectangle.Visibility != Visibility.Visible)
+                    selectionRectangle.Visibility = Visibility.Visible;
+            }
+        }
+        #endregion
+
+        private void ImgPhoto_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (isDragging)
+            {
+                isDragging = false;
+                if (selectionRectangle.Width > 0)
+                {
+                    ButtonCrop.Visibility = System.Windows.Visibility.Visible;
+                    ButtonCrop.IsEnabled = true;
+                }
+                if (selectionRectangle.Visibility != Visibility.Visible)
+                    selectionRectangle.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void ButtonCrop_Click(object sender, RoutedEventArgs e)
+        {
+            if (ImgPhoto.Source != null)
+            {
+                Rect rect1 = new Rect(Canvas.GetLeft(selectionRectangle),
+                    Canvas.GetTop(selectionRectangle), selectionRectangle.Width,
+                    selectionRectangle.Height);
+                System.Windows.Int32Rect rcFrom = new System.Windows.Int32Rect();
+                rcFrom.X = (int)((rect1.X) * (ImgPhoto.Source.Width) / (ImgPhoto.Width));
+                rcFrom.Y = (int)((rect1.Y) * (ImgPhoto.Source.Height) / (ImgPhoto.Height));
+                rcFrom.Width = (int)((rect1.Width) * (ImgPhoto.Source.Width) / (ImgPhoto.Width));
+                rcFrom.Height = (int)((rect1.Height) * (ImgPhoto.Source.Height) / (ImgPhoto.Height));
+                BitmapSource bs = new CroppedBitmap(ImgPhoto.Source as BitmapSource, rcFrom);
+                ImgPhoto.Source = bs;
+            }
+        }
+
+        private void ImgPhoto_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var st = (ScaleTransform)ImgPhoto.RenderTransform;
+            double zoom = e.Delta > 0 ? .2 : -.2;
+            st.ScaleX += zoom;
+            st.ScaleY += zoom;
+        }
     }
 }
