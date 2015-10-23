@@ -6,6 +6,7 @@
         <ResourceDictionary>
             <BitmapImage x:Key="BrowseFolder" UriSource="Resources/folder265.png"/>
             <BitmapImage x:Key="OpenImage" UriSource="Resources/image-128.png"/>
+            <BitmapImage x:Key="SaveImage" UriSource="Resources/system-save-icon.png"/>
             <DataTemplate x:Key="ImageTemplate">
                 <StackPanel>
                     <Image Source="{Binding ImageSrc}" Width="150" Height="100"/>
@@ -32,6 +33,12 @@
                         <TextBlock>Open Image</TextBlock>
                     </StackPanel>
                 </Button>
+                <Separator></Separator>
+                <Button Name="ButtonSave" Click="ButtonSave_OnClick">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{StaticResource SaveImage}" Height="17" Width="24"/>
+                    </StackPanel>
+                </Button>
             </ToolBar>
         </ToolBarTray>
 
@@ -46,9 +53,7 @@
                      Name="ListBoxImages" Margin="0,30,0,0" SelectionChanged="ListBoxImages_SelectionChanged"/>
         </Grid>
         <Image Name="ImgPhoto" 
-               Source="{Binding ElementName=ListBoxImages, Path=SelectedItem.ImageSrc}">
-
-        </Image>
+               Source="{Binding ElementName=ListBoxImages, Path=SelectedItem.ImageSrc}"/>
 
     </DockPanel>
 </Window>

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Drawing;
 using System.Windows.Forms;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace ImageViewer
         {
             get
             {
-                var result = new List<ImageInViewer>();
+                List<ImageInViewer> result = new List<ImageInViewer>();
                 foreach (string filename in
                     Directory.GetFiles(OpenFolderPath))
                 {
@@ -66,6 +67,8 @@ namespace ImageViewer
 
         #endregion
 
+        #region Button Load, OpenFolder, Save
+
         private void BtnLoad_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog op = new OpenFileDialog();
@@ -76,30 +79,47 @@ namespace ImageViewer
                 ImgPhoto.Source = new BitmapImage(new Uri(op.FileName));
             }
         }
-
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        
+        private void ButtonOpenFolder_OnClick(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog sp = new SaveFileDialog();
-            sp.Title = "Save a picture";
-            sp.Filter = filterToImages;
-            if (sp.ShowDialog() == true)
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
             {
-                Image image = ImgPhoto;
-                
-                
+                if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    OpenFolderPath = fbd.SelectedPath;
+                    FolderNameLabel.Content = OpenFolderPath;
+                    BindingExpression dplb = ListBoxImages.GetBindingExpression(ItemsControl.ItemsSourceProperty);
+                    dplb.UpdateTarget();
+                }
             }
         }
 
-        private void ButtonOpenFolder_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonSave_OnClick(object sender, RoutedEventArgs e)
         {
-            var fbd = new FolderBrowserDialog();
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            SaveFileDialog sfd = new SaveFileDialog {Title = "Save a picture",
+                Filter = filterToImages};
+            if (sfd.ShowDialog() == true)
             {
-                OpenFolderPath = fbd.SelectedPath;
-                FolderNameLabel.Content = OpenFolderPath;
-                var dplb = ListBoxImages.GetBindingExpression(ItemsControl.ItemsSourceProperty);
-                dplb.UpdateTarget();
+                string extension = System.IO.Path.GetExtension(sfd.FileName);
+
+                switch (extension)
+                {
+                    case ".png": SaveUsingEncoder(sfd.FileName, new PngBitmapEncoder());
+                        break;
+                    case ".jpg": 
+                    default: SaveUsingEncoder(sfd.FileName, new JpegBitmapEncoder());
+                        break;
+                }
             }
+        }
+
+        #endregion
+
+        private void SaveUsingEncoder(string fileName, BitmapEncoder encoder)
+        {
+            encoder.Frames.Add(BitmapFrame.Create((BitmapSource)ImgPhoto.Source));
+            using (var filestream = new FileStream(fileName, FileMode.Create))
+                encoder.Save(filestream);
         }
 
         private void ListBoxImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -107,7 +127,7 @@ namespace ImageViewer
             if (e.AddedItems.Count != 0)
             {
                 IList addedItems = e.AddedItems;
-                var image = (ImageInViewer) addedItems[0];
+                ImageInViewer image = (ImageInViewer) addedItems[0];
                 ImgPhoto.Source = image.ImageSrc;
             }
         }
