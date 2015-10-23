@@ -52,8 +52,13 @@
                      VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                      Name="ListBoxImages" Margin="0,30,0,0" SelectionChanged="ListBoxImages_SelectionChanged"/>
         </Grid>
+        <Slider DockPanel.Dock="Bottom" Name="AngleSlider" Minimum="0" Maximum="360" Height="20"/>
         <Image Name="ImgPhoto" 
-               Source="{Binding ElementName=ListBoxImages, Path=SelectedItem.ImageSrc}"/>
-
+               Source="{Binding ElementName=ListBoxImages, Path=SelectedItem.ImageSrc}">
+            <Image.LayoutTransform>
+                <RotateTransform Angle="{Binding ElementName=AngleSlider, Path=Value}"/>
+            </Image.LayoutTransform>
+        </Image>
+        
     </DockPanel>
 </Window>

@@ -82,7 +82,7 @@ namespace ImageViewer
         
         private void ButtonOpenFolder_OnClick(object sender, RoutedEventArgs e)
         {
-            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
+            using (var fbd = new FolderBrowserDialog())
             {
                 if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
@@ -104,24 +104,28 @@ namespace ImageViewer
 
                 switch (extension)
                 {
-                    case ".png": SaveUsingEncoder(sfd.FileName, new PngBitmapEncoder());
+                    case ".png": SaveUsingEncoder(ImgPhoto, sfd.FileName,
+                        new PngBitmapEncoder());
                         break;
                     case ".jpg": 
-                    default: SaveUsingEncoder(sfd.FileName, new JpegBitmapEncoder());
+                    default: SaveUsingEncoder(ImgPhoto, sfd.FileName,
+                        new JpegBitmapEncoder());
                         break;
                 }
             }
         }
 
-        #endregion
-
-        private void SaveUsingEncoder(string fileName, BitmapEncoder encoder)
+        private void SaveUsingEncoder(System.Windows.Controls.Image image, string fileName,
+            BitmapEncoder encoder)
         {
-            encoder.Frames.Add(BitmapFrame.Create((BitmapSource)ImgPhoto.Source));
+            RenderTargetBitmap rtb = GetTransformedBitmap(image);
+            encoder.Frames.Add(BitmapFrame.Create(rtb));
             using (var filestream = new FileStream(fileName, FileMode.Create))
                 encoder.Save(filestream);
         }
 
+        #endregion
+        
         private void ListBoxImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count != 0)
@@ -130,6 +134,21 @@ namespace ImageViewer
                 ImageInViewer image = (ImageInViewer) addedItems[0];
                 ImgPhoto.Source = image.ImageSrc;
             }
+        }
+
+        private RenderTargetBitmap GetTransformedBitmap(System.Windows.Controls.Image image)
+        {
+            RenderTargetBitmap rtb = new RenderTargetBitmap((int)image.ActualWidth,
+                (int)image.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+            Rect bounds = VisualTreeHelper.GetDescendantBounds(image);
+            DrawingVisual dv = new DrawingVisual();
+            using (DrawingContext ctx = dv.RenderOpen())
+            {
+                VisualBrush vb = new VisualBrush(image);
+                ctx.DrawRectangle(vb, null, new Rect(new System.Windows.Point(), bounds.Size));
+            }
+            rtb.Render(dv);
+            return rtb;
         }
         
     }
