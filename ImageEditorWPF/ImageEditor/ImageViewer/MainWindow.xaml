@@ -65,7 +65,7 @@
                 <Border ClipToBounds="True">
                     <Image Name="ImgPhoto" RenderTransformOrigin="0.5,0.5" 
                            Source="{Binding ElementName=ListBoxImages, Path=SelectedItem.ImageSrc}" 
-                           MouseWheel="ImgPhoto_MouseWheel" Width="{Binding ElementName=ImageSizeSlider, Path=Value}">
+                           MouseWheel="ImgPhoto_MouseWheel" Width="{Binding ElementName=ImageSizeSlider, Path=Value}" MouseLeftButtonDown="ImgPhoto_MouseLeftButtonDown" MouseLeftButtonUp="ImgPhoto_MouseLeftButtonUp" MouseMove="ImgPhoto_MouseMove">
                         <Image.RenderTransform>
                             <ScaleTransform/>
                         </Image.RenderTransform>

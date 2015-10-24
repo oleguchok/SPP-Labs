@@ -34,8 +34,10 @@ namespace ImageViewer
               "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
               "Portable Network Graphic (*.png)|*.png";
 
-        private bool isDragging = false;
+        private bool isDrawing = false;
+        private System.Drawing.Point lastPoint;
         private System.Windows.Point anchorPoint = new System.Windows.Point();
+        private Bitmap myImage;
 
         public MainWindow()
         {
@@ -62,7 +64,7 @@ namespace ImageViewer
                             new ImageInViewer(
                             new BitmapImage(
                             new Uri(filename)),
-                            System.IO.Path.GetFileNameWithoutExtension(filename)));
+                            System.IO.Path.GetFileName(filename)));
                     }
                     catch { }
                 }
@@ -82,6 +84,7 @@ namespace ImageViewer
             if (op.ShowDialog() == true)
             {
                 ImgPhoto.Source = new BitmapImage(new Uri(op.FileName));
+                myImage = new Bitmap(op.FileName);
             }
         }
         
@@ -138,6 +141,7 @@ namespace ImageViewer
                 IList addedItems = e.AddedItems;
                 ImageInViewer image = (ImageInViewer) addedItems[0];
                 ImgPhoto.Source = image.ImageSrc;
+                myImage = new Bitmap(OpenFolderPath + "\\" + image.Name);
             }
         }
 
@@ -163,5 +167,39 @@ namespace ImageViewer
             st.ScaleX += zoom;
             st.ScaleY += zoom;
         }
+
+        private void ImgPhoto_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            isDrawing = true;
+            lastPoint = new System.Drawing.Point((int)Math.Round(e.GetPosition(ImgPhoto).X),
+                (int)Math.Round(e.GetPosition(ImgPhoto).Y));
+        }
+
+        private void ImgPhoto_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            isDrawing = false;
+        }
+
+        private void ImgPhoto_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (isDrawing)
+            {
+                System.Drawing.Point p = new System.Drawing.Point((int)Math.Round(e.GetPosition(ImgPhoto).X),
+                    (int)Math.Round(e.GetPosition(ImgPhoto).Y));
+                using (Graphics grp = Graphics.FromImage(myImage))
+                {
+                    grp.DrawLine(Pens.Black, p, lastPoint);
+                }
+                lastPoint = p;
+                ImgPhoto.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                   myImage.GetHbitmap(),
+                   IntPtr.Zero,
+                   System.Windows.Int32Rect.Empty,
+                   BitmapSizeOptions.FromWidthAndHeight(myImage.Width, myImage.Height));
+                ImgPhoto.InvalidateVisual();
+            }
+        }
+
+
     }
 }
