@@ -331,7 +331,8 @@ namespace PhotoEditor
         {
             isPencil = false;
             isCut = false;
-            pictureBoxForCut.Enabled = false;
+            if (pictureBoxForCut != null)
+                pictureBoxForCut.Enabled = false;
         }
 
         #endregion
