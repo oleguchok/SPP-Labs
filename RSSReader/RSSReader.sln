@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSSReader", "RSSReader\RSSReader.csproj", "{B32A4CD0-0D32-43F3-A741-11D7967AB275}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssNewsReader", "RssNewsReader\RssNewsReader.csproj", "{65EB0BA6-EF1A-47E6-A690-FF60ED3F588A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B32A4CD0-0D32-43F3-A741-11D7967AB275}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B32A4CD0-0D32-43F3-A741-11D7967AB275}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B32A4CD0-0D32-43F3-A741-11D7967AB275}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B32A4CD0-0D32-43F3-A741-11D7967AB275}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65EB0BA6-EF1A-47E6-A690-FF60ED3F588A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65EB0BA6-EF1A-47E6-A690-FF60ED3F588A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65EB0BA6-EF1A-47E6-A690-FF60ED3F588A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65EB0BA6-EF1A-47E6-A690-FF60ED3F588A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
