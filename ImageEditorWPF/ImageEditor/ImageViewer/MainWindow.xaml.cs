@@ -191,12 +191,16 @@ namespace ImageViewer
                     grp.DrawLine(Pens.Black, p, lastPoint);
                 }
                 lastPoint = p;
-                ImgPhoto.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                   myImage.GetHbitmap(),
-                   IntPtr.Zero,
-                   System.Windows.Int32Rect.Empty,
-                   BitmapSizeOptions.FromWidthAndHeight(myImage.Width, myImage.Height));
-                ImgPhoto.InvalidateVisual();
+                try
+                {
+                    ImgPhoto.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                        myImage.GetHbitmap(),
+                        IntPtr.Zero,
+                        System.Windows.Int32Rect.Empty,
+                        BitmapSizeOptions.FromWidthAndHeight(myImage.Width, myImage.Height));
+                    ImgPhoto.InvalidateVisual();
+                }
+                catch (Exception ex) { }
             }
         }
 
