@@ -31,7 +31,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300" />
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="300"/>
                     </Grid.ColumnDefinitions>
                     <ScrollViewer Grid.Column="0">
                         <StackPanel>
@@ -49,7 +49,7 @@
                             </ListBox>
                             <TabPanel Margin="5">
                                 <Label>New feed:</Label>
-                                <TextBox Name="NewRssFeedTextBox" MinWidth="150"></TextBox>
+                                <TextBox Name="NewRssFeedTextBox" MinWidth="150"/>
                                 <Button Name="AddNewRssFeedButton" MinWidth="50" Click="AddNewRssFeedButton_OnClick">_Add</Button>
                             </TabPanel>
                             <Button Name="DeleteRssFeedButton"  HorizontalAlignment="Stretch"
@@ -59,6 +59,24 @@
                     <ScrollViewer Grid.Column="1">
                         <StackPanel>
                             <Label>Email recipients:</Label>
+                            <ListBox MaxWidth="300" x:Name="EmailList" ItemsSource="{Binding}"
+                                     HorizontalContentAlignment="Stretch" Background="#4C808080"
+                                     Margin="5">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border>
+                                            <Label Content="{Binding}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <TabPanel Margin="5">
+                                <Label>New recipient:</Label>
+                                <TextBox Name="EmailTextBox" MinWidth="130"/>
+                                <Button Name="AddEmailButton" MinWidth="50" Click="AddEmailButton_OnClick">_Add</Button>
+                            </TabPanel>
+                            <Button Name="DeleteEmailButton"  HorizontalAlignment="Stretch"
+                                    Background="Crimson" Click="DeleteEmailButton_OnClick">_Delete</Button>
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>

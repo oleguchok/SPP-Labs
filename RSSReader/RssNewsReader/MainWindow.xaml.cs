@@ -29,11 +29,14 @@ namespace RssNewsReader
         private int menuShowClick = 0;
         private ObservableCollection<string> rssFeedsList = new ObservableCollection<string>(
                 ConfigurationManager.AppSettings["rssFeedList"].Split(new char[] { ';' }));
+        private ObservableCollection<string> emailList = new ObservableCollection<string>(
+            ConfigurationManager.AppSettings["emailList"].Split(new char[] { ';' })); 
 
         public MainWindow() 
         {
             InitializeComponent();
             RssFeedsList.DataContext = rssFeedsList;
+            EmailList.DataContext = emailList;
         }
 
         private void OnGetFeed(object sender, RoutedEventArgs e)
@@ -90,5 +93,23 @@ namespace RssNewsReader
                 rssFeedsList.RemoveAt(RssFeedsList.SelectedIndex);
             }
         }
+
+        private void AddEmailButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (EmailTextBox.Text != string.Empty)
+            {
+                emailList.Add(EmailTextBox.Text);
+                EmailTextBox.Text = string.Empty;
+            }
+        }
+
+        private void DeleteEmailButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (EmailList.SelectedIndex != -1)
+            {
+                emailList.RemoveAt(EmailList.SelectedIndex);
+            }
+        }
+
     }
 }
