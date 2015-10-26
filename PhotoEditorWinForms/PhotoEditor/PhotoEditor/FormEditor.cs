@@ -30,7 +30,6 @@ namespace PhotoEditor
 
         public FormEditor()
         {
-            ; ;
             InitializeComponent();
         }
 
@@ -72,55 +71,10 @@ namespace PhotoEditor
             if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0)
             {
                 if (!isImageScaling)
-                pictureBox.Image.Save(sfd.FileName);
+                    pictureBox.Image.Save(sfd.FileName);
                 else
                     originalImage.Save(sfd.FileName);
             }
-        }
-
-        private void toolStripButtonSelect_Click(object sender, EventArgs e)
-        {
-            isCropSelected = true;
-        }
-
-        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isCropSelected)
-            {
-                try 
-                {
-                    if (e.Button == System.Windows.Forms.MouseButtons.Left)
-                    {
-                        Cursor = Cursors.Cross;
-                    }
-                    pictureBox.Refresh();
-                }
-                catch (Exception ex)
-                { }
-            }
-        }
-
-        private void pictureBox_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (isCropSelected)
-            {
-               
-            }
-        }
-
-        private void pictureBox_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }      
-
-        private void toolStripDefaultCursor_Click(object sender, EventArgs e)
-        {
-            isCropSelected = false;
-        }
-
-        private void pictureBox_Click(object sender, EventArgs e)
-        {
-            
         }
 
         private void FormEditor_Resize(object sender, EventArgs e)
@@ -144,18 +98,18 @@ namespace PhotoEditor
         }
 
         private void toolStripComboBoxZoom_Leave(object sender, EventArgs e)
-            {
+        {
             ScaleImageOnPictureBox(toolStripComboBoxZoom.Text);
             isImageScaling = true;
         }
 
         private void CalculateModifiedImageSize(int widthZoom, int heightZoom)
-            {
+        {
             if (originalImage == null)
                 throw new ArgumentNullException("Image", "Choose image");
             modifiedImageSize = new Size((originalImage.Width * widthZoom) / 100,
                     (originalImage.Height * heightZoom) / 100);
-            }            
+        }
 
         private int ParseSizeString(String text)
         {
@@ -177,7 +131,7 @@ namespace PhotoEditor
                 else
                     return result;                    
             }
-        }
+        }        
 
         private void ScaleImageOnPictureBox(String text)
         {
@@ -187,14 +141,15 @@ namespace PhotoEditor
                 CalculateModifiedImageSize(zoom, zoom);
                 if (pictureBox.Image != null)
                 {
-                    RedrawPictureBoxImage();
+                    RedrawPictureBoxImage(originalImage, modifiedImageSize);
                     PictureBoxLocation();
-        }
+                }
             } catch (ArgumentException ex)
-        {
+            {
                 MessageBox.Show(ex.Message);
+            }
         }
-        }
+<<<<<<< HEAD
         private void RedrawPictureBoxImage()
         {
             Bitmap bm_source = new Bitmap(originalImage);
@@ -205,14 +160,27 @@ namespace PhotoEditor
         {
             Bitmap bm_dest = new Bitmap(modifiedImageSize.Width, modifiedImageSize.Height,
                 PixelFormat.Format24bppRgb);
+=======
+
+        private void RedrawPictureBoxImage(Image source, Size modifiedSize)
+        {
+            Bitmap bm_source = new Bitmap(source);
+            Bitmap bm_dest = new Bitmap(modifiedSize.Width, modifiedSize.Height,
+                    PixelFormat.Format24bppRgb);
+>>>>>>> origin/master
             using (Graphics gr_dest = Graphics.FromImage(bm_dest))
             {
                 gr_dest.CompositingQuality = CompositingQuality.HighQuality;
                 gr_dest.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 gr_dest.SmoothingMode = SmoothingMode.HighQuality;
                 gr_dest.PixelOffsetMode = PixelOffsetMode.HighQuality;
+<<<<<<< HEAD
                 gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width + 1, bm_dest.Height + 1);
             }                
+=======
+                gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width, bm_dest.Height);
+            }
+>>>>>>> origin/master
             InsertImageInPictureBox(pictureBox, bm_dest);
         }
 
@@ -230,8 +198,6 @@ namespace PhotoEditor
                 ResizeForm resizeForm = new ResizeForm();
                 DataExchanger.EventSizeHandler =
                     new DataExchanger.ExchangeSizeEvent(ResizeImage);
-                DataExchanger.EventAngleHandler =
-                    new DataExchanger.ExchangeAngleEvent(RotateImage);
                 resizeForm.ShowDialog();
                 resizeForm.Dispose();
             }
@@ -244,63 +210,39 @@ namespace PhotoEditor
         private void ResizeImage(int widht, int height)
         {
             CalculateModifiedImageSize(widht, height);
-            RedrawPictureBoxImage();
+            RedrawPictureBoxImage(originalImage, modifiedImageSize);
             originalImage = pictureBox.Image;
             PictureBoxLocation();
         }
 
-        private void RotateImage(float angle)
+        #region Rotate Image
+        private void toolStripButtonRotateRight_Click(object sender, EventArgs e)
         {
-            pictureBox.Image = GetRotatedImage(originalImage, angle);
-            originalImage = pictureBox.Image;
+            RotateImageOnFlip(RotateFlipType.Rotate90FlipNone);
         }
 
-        private Bitmap GetRotatedImage(Image image, float angle)
+        private void toolStripButtonRotateLeft_Click(object sender, EventArgs e)
         {
-            if (image == null)
-                throw new ArgumentNullException("image");
-
-            PointF offset = new PointF((float)image.Width / 2, (float)image.Height / 2);
-
-            //create a new empty bitmap to hold rotated image
-            Bitmap rotatedBmp = new Bitmap(image.Width, image.Height);
-            rotatedBmp.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            //make a graphics object from the empty bitmap
-            Graphics g = Graphics.FromImage(rotatedBmp);
-
-            //Put the rotation point in the center of the image
-            g.TranslateTransform(offset.X, offset.Y);
-
-            //rotate the image
-            g.RotateTransform(angle);
-
-            //move the image back
-            g.TranslateTransform(-offset.X, -offset.Y);
-
-            //draw passed in image onto graphics object
-            g.DrawImage(image, new PointF(0, 0));
-
-            return rotatedBmp;
+            RotateImageOnFlip(RotateFlipType.Rotate270FlipNone);
         }
 
-        private void TrackBarBrightness_Scroll(object sender, EventArgs e)
+        private void RotateImageOnFlip(RotateFlipType flipType)
         {
-            float value = TrackBarBrightness.Value * 0.01f;
-            float[][] colorMatrixElements = 
+            if (pictureBox.Image == null)
+                MessageBox.Show(@"Choose image");
+            else
             {
-                new float[] {1,0,0,0,0},
-                new float[] {0,1,0,0,0},
-                new float[] {0,0,1,0,0},
-                new float[] {0,0,0,1,0},
-                new float[] {value,value,value,0,1}
-            };
-            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
-            ImageAttributes imageAttributes = new ImageAttributes();
+                pictureBox.Image.RotateFlip(flipType);
+                RedrawPictureBoxImage(pictureBox.Image, pictureBox.Image.Size);
+                PictureBoxLocation();
+                pictureBox.Refresh();
+            }
+        }
+
+        #endregion
 
 
-            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-
+<<<<<<< HEAD
             //PictureBox1.Image
             editedImage = new Bitmap(originalImage);
             Graphics g = Graphics.FromImage(editedImage);
@@ -321,6 +263,8 @@ namespace PhotoEditor
             originalImage = editedImage;
             TrackBarBrightness.Value = 0;
         }
+=======
+>>>>>>> origin/master
     }
 
 }

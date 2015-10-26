@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PhotoEditor.Properties {
+namespace ImageViewer.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace PhotoEditor.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PhotoEditor.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ImageViewer.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -63,9 +63,9 @@ namespace PhotoEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap gnome_object_rotate_left {
+        internal static System.Drawing.Bitmap folder265 {
             get {
-                object obj = ResourceManager.GetObject("gnome_object_rotate_left", resourceCulture);
+                object obj = ResourceManager.GetObject("folder265", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace PhotoEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap gnome_object_rotate_right {
+        internal static System.Drawing.Bitmap image_128 {
             get {
-                object obj = ResourceManager.GetObject("gnome_object_rotate_right", resourceCulture);
+                object obj = ResourceManager.GetObject("image_128", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace PhotoEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icon_64x64 {
+        internal static System.Drawing.Bitmap system_save_icon {
             get {
-                object obj = ResourceManager.GetObject("icon_64x64", resourceCulture);
+                object obj = ResourceManager.GetObject("system_save_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
