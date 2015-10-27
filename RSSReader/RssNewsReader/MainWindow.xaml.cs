@@ -181,7 +181,7 @@ namespace RssNewsReader
             lock (currentFeeds)
             {
                 foreach (var feed in rssFeedsList)
-                {
+            {
                     currentFeeds.AddRange(GetFeedsFromUrl(feed));
                 }
             }
@@ -203,6 +203,10 @@ namespace RssNewsReader
                 MessageBox.Show(ex.Message, "Syndication Reader");
                 return null;
             }
+        }
+        private void RssFeedsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            textUrl.Text = (string)RssFeedsList.SelectedValue;
         }
     }
 }

@@ -39,7 +39,7 @@
                             <Label>RSS Feed:</Label>
                             <ListBox MaxWidth="300" x:Name="RssFeedsList" ItemsSource="{Binding}"
                                      HorizontalContentAlignment="Stretch" Background="#4C808080"
-                                     Margin="5">
+                                     Margin="5" MouseDoubleClick="RssFeedsList_MouseDoubleClick">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <Border>
