@@ -37,6 +37,7 @@
             this.toolStripComboBoxZoom = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tabPageImage = new System.Windows.Forms.TabPage();
+            this.TrackBarBrightness = new System.Windows.Forms.TrackBar();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.panelPictureBox = new System.Windows.Forms.Panel();
             this.pictureBox = new System.Windows.Forms.PictureBox();
@@ -45,6 +46,10 @@
             this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.cutToolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonResize = new System.Windows.Forms.ToolStripButton();
+<<<<<<< HEAD
+            this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.panelPictureBox = new System.Windows.Forms.Panel();
+=======
             this.toolStripButtonRotateLeft = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRotateRight = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -63,13 +68,18 @@
             this.copyToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.cutToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.printToolStripButton = new System.Windows.Forms.ToolStripButton();
+>>>>>>> origin/master
             this.tabControl.SuspendLayout();
             this.tabPageFile.SuspendLayout();
             this.toolStripFile.SuspendLayout();
             this.tabPageImage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarBrightness)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.panelPictureBox.SuspendLayout();
+<<<<<<< HEAD
+=======
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+>>>>>>> origin/master
             this.SuspendLayout();
             // 
             // tabControl
@@ -154,6 +164,21 @@
             this.tabPageImage.UseVisualStyleBackColor = true;
             // 
             // TrackBarBrightness
+<<<<<<< HEAD
+            // 
+            this.TrackBarBrightness.Location = new System.Drawing.Point(560, 3);
+            this.TrackBarBrightness.Maximum = 100;
+            this.TrackBarBrightness.Minimum = -100;
+            this.TrackBarBrightness.Name = "TrackBarBrightness";
+            this.TrackBarBrightness.Size = new System.Drawing.Size(105, 45);
+            this.TrackBarBrightness.TabIndex = 1;
+            this.TrackBarBrightness.Scroll += new System.EventHandler(this.TrackBarBrightness_Scroll);
+            this.TrackBarBrightness.DragLeave += new System.EventHandler(this.TrackBarBrightness_DragLeave);
+            this.TrackBarBrightness.Leave += new System.EventHandler(this.TrackBarBrightness_Leave);
+            // 
+            // toolStrip1
+=======
+>>>>>>> origin/master
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripButton1,
@@ -378,6 +403,8 @@
             this.pasteToolStripButton.Size = new System.Drawing.Size(23, 24);
             this.pasteToolStripButton.Text = "&Paste";
             // 
+<<<<<<< HEAD
+=======
             // copyToolStripButton
             // 
             this.copyToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -405,6 +432,7 @@
             this.printToolStripButton.Size = new System.Drawing.Size(23, 24);
             this.printToolStripButton.Text = "&Print";
             // 
+>>>>>>> origin/master
             // FormEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -423,12 +451,19 @@
             this.toolStripFile.PerformLayout();
             this.tabPageImage.ResumeLayout(false);
             this.tabPageImage.PerformLayout();
+<<<<<<< HEAD
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarBrightness)).EndInit();
+=======
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.panelPictureBox.ResumeLayout(false);
+>>>>>>> origin/master
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.panelPictureBox.ResumeLayout(false);
+<<<<<<< HEAD
+=======
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+>>>>>>> origin/master
             this.ResumeLayout(false);
 
         }
