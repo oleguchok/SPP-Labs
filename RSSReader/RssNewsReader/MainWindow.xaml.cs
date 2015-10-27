@@ -111,5 +111,9 @@ namespace RssNewsReader
             }
         }
 
+        private void RssFeedsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            textUrl.Text = (string)RssFeedsList.SelectedValue;
+        }
     }
 }
