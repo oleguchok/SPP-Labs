@@ -1,7 +1,7 @@
 ﻿<Window x:Class="RssNewsReader.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="{Binding Path=Title.Text}" Height="350" Width="525" MinWidth="600">
+        Title="{Binding Path=Title.Text}" MinWidth="1140" Height="350" Width="1140">
 
     <Window.Resources>
         <Storyboard x:Key="sbShowTopMenu">
@@ -32,6 +32,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300" />
                         <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <ScrollViewer Grid.Column="0">
                         <StackPanel>
@@ -79,9 +80,52 @@
                                     Background="Crimson" Click="DeleteEmailButton_OnClick">_Delete</Button>
                         </StackPanel>
                     </ScrollViewer>
+                    <Grid Grid.Column="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="313"/>
+                            <ColumnDefinition Width="285"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="5,5,191,5">
+                            <Label HorizontalAlignment="Center">Time Shedule:</Label>
+                            <RadioButton GroupName="Time" Content="1 minute" Tag="0:1:0" IsChecked="True" Checked="TimeRadio_Checked" />
+                            <RadioButton GroupName="Time" Content="10 minutes" Tag="0:10:0" Checked="TimeRadio_Checked" />
+                            <RadioButton GroupName="Time" Content="30 minutes" Tag="0:30:0" Checked="TimeRadio_Checked" />
+                            <RadioButton GroupName="Time" Content="1 hour" Tag="1:0:0" Checked="TimeRadio_Checked" />
+                            <RadioButton GroupName="Time" Content="3 hours" Tag="3:0:0" Checked="TimeRadio_Checked" />
+                        </StackPanel>
+                        <ScrollViewer Margin="114,5,226,5" Grid.ColumnSpan="2">
+                            <StackPanel>
+                                <Label HorizontalAlignment="Center">Tags:</Label>
+                                <ListBox MaxWidth="300" x:Name="TagList" ItemsSource="{Binding}"
+                                         HorizontalContentAlignment="Stretch" Background="#4C808080"
+                                         Margin="5">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border>
+                                                <Label Content="{Binding}"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <TabPanel Margin="5">
+                                    <Label>New recipient:</Label>
+                                    <TextBox Name="TagTextBox" MinWidth="130"/>
+                                    <Button Name="AddTagButton" MinWidth="50" Click="AddTagButton_OnClick">_Add</Button>
+                                </TabPanel>
+                                <Button Name="DeleteTagButton"  HorizontalAlignment="Stretch"
+                                        Background="Crimson" Click="DeleteTagButton_OnClick">_Delete</Button>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <StackPanel Grid.Column="1" Margin="66,0,92,0">
+                            <CheckBox Margin="10" Name="IsMailingCheckBox">Send to emails?</CheckBox>
+                            <Button Name="GetFeedByCriteriasButton" Click="GetFeedByCriteriasButton_OnClick">Get Feeds</Button>
+                        </StackPanel>
+                    </Grid>
                 </Grid>
             </Border>
         </StackPanel>
+
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top" Background="BlueViolet" x:Name="heading">
             <Label Content="{Binding Path=Title.Text}" FontSize="16" />
             <Label Content="{Binding Path=Description.Text}" />
@@ -96,6 +140,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
         <DockPanel x:Name="content">
             <Label DockPanel.Dock="Top" Content="{Binding Description.Text}" />
             <Frame Source="{Binding Path=Links[0].Uri}" />
