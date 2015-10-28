@@ -166,7 +166,12 @@ namespace RssNewsReader
 
         private void GetFeedByCriteriasButton_OnClick(object sender, RoutedEventArgs e)
         {
-            timer = new System.Timers.Timer(5000);
+            if (timer != null)
+            {
+                timer.Stop();
+                timer.Dispose();
+            }
+            timer = new System.Timers.Timer(100000);
             FeedLoader feedLoader = new ConcreteFeedLoader();
             ThreadPool.QueueUserWorkItem((state) => RefreshBindingInFeedContent(feedLoader));
             timer.Elapsed += (o, args) => RefreshBindingInFeedContent(feedLoader);
@@ -179,25 +184,7 @@ namespace RssNewsReader
                 new Action(() => feedContent.DataContext =
                     feedLoader.LoadFeedsEntry(rssFeedsList, tagList, emailList)));
         }
-
-        private void ParseFeedByCtireria(object state)
-        {
-            filterResult.Clear();
-            foreach (var tag in tagList)
-            {
-                lock (currentFeeds)
-                {
-                    foreach (var syndicationItem in currentFeeds)
-                    {
-                        if (syndicationItem.Summary.Text.Contains(tag))
-                        {
-                            filterResult.Add(syndicationItem);
-                        }
-                    }
-                }
-            }
-        }
-
+        
         private void RssFeedsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             textUrl.Text = (string)RssFeedsList.SelectedValue;

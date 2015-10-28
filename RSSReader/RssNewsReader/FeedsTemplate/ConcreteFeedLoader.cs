@@ -20,7 +20,8 @@ namespace RssNewsReader.FeedsTemplate
             throw new NotImplementedException();
         }
 
-        protected override IEnumerable<SyndicationItem> LoadFeeds(IEnumerable<string> feedsToLoad)
+        protected override IEnumerable<SyndicationItem> LoadFilterFeeds(IEnumerable<string> feedsToLoad,
+            IEnumerable<string> filterTags)
         {
             var items = new List<SyndicationItem>();
             foreach (var feed in feedsToLoad)
@@ -33,17 +34,33 @@ namespace RssNewsReader.FeedsTemplate
                         formatter.ReadFrom(reader);
                         items.AddRange(formatter.Feed.Items);
                     }
-                    MessageBox.Show("1");
                 }
                 catch (FileNotFoundException ex) { }
+                catch (WebException ex) { }
             }
-            return items;
+            return FilterLoadedFeeds(items, filterTags);
         }
 
-        protected override IEnumerable<SyndicationItem> FilterFeeds(IEnumerable<SyndicationItem> feeds,
+        private IEnumerable<SyndicationItem> FilterLoadedFeeds(IEnumerable<SyndicationItem> loadedFeeds,
             IEnumerable<string> filterTags)
         {
-            throw new NotImplementedException();
+            var filteredList = new List<SyndicationItem>();
+            if (filterTags.Any())
+            {
+                foreach (var syndicationItem in loadedFeeds)
+                {
+                    foreach (var tag in filterTags)
+                    {
+                        if (syndicationItem.Summary.Text.ToUpper().Contains(tag.ToUpper()))
+                        {
+                            filteredList.Add(syndicationItem);
+                            break;
+                        }
+                    }
+                }
+                return filteredList;
+            }
+                return loadedFeeds;
         }
     }
 }

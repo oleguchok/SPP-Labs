@@ -16,10 +16,14 @@ namespace RssNewsReader.FeedsTemplate
         public IEnumerable<SyndicationItem> LoadFeedsEntry(IEnumerable<string> feedsToLoad,
             IEnumerable<string> filterTags, IEnumerable<string> recipients)
         {
-            ThreadPool.QueueUserWorkItem((state => LoadFeeds(feedsToLoad)));
-            var feeds = new List<SyndicationItem>(){new SyndicationItem()};
-            //var feeds = LoadFeeds(feedsToLoad);
-            //feeds = FilterFeeds(feeds, filterTags);
+            var waitHandle = new ManualResetEvent(false);
+            dynamic feeds = null;
+            ThreadPool.QueueUserWorkItem((state =>
+            {
+                feeds = LoadFilterFeeds(feedsToLoad, filterTags);
+                waitHandle.Set();
+            }));
+            waitHandle.WaitOne();
             //SendToRecipients(recipients, feeds);
             return feeds;
         }
@@ -27,9 +31,7 @@ namespace RssNewsReader.FeedsTemplate
         protected abstract void SendToRecipients(IEnumerable<string> recipients,
             IEnumerable<SyndicationItem> feeds);
 
-        protected abstract IEnumerable<SyndicationItem> FilterFeeds(IEnumerable<SyndicationItem> feeds,
+        protected abstract IEnumerable<SyndicationItem> LoadFilterFeeds(IEnumerable<string> feedsToLoad,
             IEnumerable<string> filterTags);
-        
-        protected abstract IEnumerable<SyndicationItem> LoadFeeds(IEnumerable<string> feedsToLoad);
     }
 }
