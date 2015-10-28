@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -20,8 +21,8 @@ namespace RssNewsReader.FeedsTemplate
             MailSender mailSender = new MailSender();
             string message = FormMessage(feeds);
             string subject = "You rss feeds by " + DateTime.Now;
-            string sender = @"pasechny.denis@yandex.ru";
-            string password = @"1q2w3e4rasdfzxc";
+            string sender = ConfigurationManager.AppSettings["senderEmail"];
+            string password = ConfigurationManager.AppSettings["senderPassword"];
             foreach (var recipient in recipients)
             {
                 try
@@ -31,17 +32,6 @@ namespace RssNewsReader.FeedsTemplate
                 catch { }
             }
         }
-
-        private string FormMessage(IEnumerable<SyndicationItem> feeds)
-        {
-            string message = String.Empty;
-            foreach (var feed in feeds)
-            {
-                    message += feed.Title.Text + " " + feed.Links.First().Uri + 
-                        Environment.NewLine;
-            }
-            return message;
-         }
 
         protected override IEnumerable<SyndicationItem> LoadFilterFeeds(IEnumerable<string> feedsToLoad,
             IEnumerable<string> filterTags)
@@ -84,6 +74,17 @@ namespace RssNewsReader.FeedsTemplate
                 return filteredList;
             }
                 return loadedFeeds;
+        }
+
+        private string FormMessage(IEnumerable<SyndicationItem> feeds)
+        {
+            string message = String.Empty;
+            foreach (var feed in feeds)
+            {
+                message += feed.Title.Text + " " + feed.Links.First().Uri +
+                    Environment.NewLine;
+            }
+            return message;
         }
     }
 }

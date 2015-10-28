@@ -118,8 +118,7 @@
                             </StackPanel>
                         </ScrollViewer>
                         <StackPanel Grid.Column="1" Margin="66,0,92,0">
-                            <CheckBox Margin="10" Name="IsMailingCheckBox">Send to emails?</CheckBox>
-                            <Button Name="GetFeedByCriteriasButton" Click="GetFeedByCriteriasButton_OnClick">Get Feeds</Button>
+                            <Button Margin="10" Name="GetFeedByCriteriasButton" Click="GetFeedByCriteriasButton_OnClick">Get Feeds</Button>
                         </StackPanel>
                     </Grid>
                 </Grid>
