@@ -38,8 +38,8 @@
                         <StackPanel>
                             <Label>RSS Feed:</Label>
                             <ListBox MaxWidth="300" x:Name="RssFeedsList" ItemsSource="{Binding}"
-                                     HorizontalContentAlignment="Stretch" Background="#4C808080"
-                                     Margin="5" MouseDoubleClick="RssFeedsList_MouseDoubleClick">
+                                     HorizontalContentAlignment="Stretch"
+                                     Margin="5" MouseDoubleClick="RssFeedsList_MouseDoubleClick" Background="#4C808080">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <Border>
@@ -109,7 +109,7 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                                 <TabPanel Margin="5">
-                                    <Label>New recipient:</Label>
+                                    <Label>New tag:</Label>
                                     <TextBox Name="TagTextBox" MinWidth="130"/>
                                     <Button Name="AddTagButton" MinWidth="50" Click="AddTagButton_OnClick">_Add</Button>
                                 </TabPanel>
