@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
@@ -13,12 +14,34 @@ namespace RssNewsReader.FeedsTemplate
 {
     public class ConcreteFeedLoader : FeedLoader
     {
-
         protected override void SendToRecipients(IEnumerable<string> recipients,
             IEnumerable<SyndicationItem> feeds)
         {
-            throw new NotImplementedException();
+            MailSender mailSender = new MailSender();
+            string message = FormMessage(feeds);
+            string subject = "You rss feeds by " + DateTime.Now;
+            string sender = @"pasechny.denis@yandex.ru";
+            string password = @"1q2w3e4rasdfzxc";
+            foreach (var recipient in recipients)
+            {
+                try
+                {
+                    mailSender.Send(sender, password, recipient, message, subject);
+                }
+                catch { }
+            }
         }
+
+        private string FormMessage(IEnumerable<SyndicationItem> feeds)
+        {
+            string message = String.Empty;
+            foreach (var feed in feeds)
+            {
+                    message += feed.Title.Text + " " + feed.Links.First().Uri + 
+                        Environment.NewLine;
+            }
+            return message;
+         }
 
         protected override IEnumerable<SyndicationItem> LoadFilterFeeds(IEnumerable<string> feedsToLoad,
             IEnumerable<string> filterTags)

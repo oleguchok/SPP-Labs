@@ -24,7 +24,7 @@ namespace RssNewsReader.FeedsTemplate
                 waitHandle.Set();
             }));
             waitHandle.WaitOne();
-            //SendToRecipients(recipients, feeds);
+            ThreadPool.QueueUserWorkItem(state => SendToRecipients(recipients, feeds));
             return feeds;
         }
 

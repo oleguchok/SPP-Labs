@@ -30,10 +30,8 @@ namespace RssNewsReader
     /// </summary>
     public partial class MainWindow : Window
     {
-        private int menuShowClick = 0;
+        private int menuShowClick;
         private TimeSpan checkedRadioButtonTimeGroup = new TimeSpan(0,1,0);
-        private List<SyndicationItem> currentFeeds = new List<SyndicationItem>(); 
-        private List<SyndicationItem> filterResult = new List<SyndicationItem>();
         private System.Timers.Timer timer;
 
         #region Observable Collections
@@ -167,11 +165,11 @@ namespace RssNewsReader
         private void GetFeedByCriteriasButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (timer != null)
-        {
+            {
                 timer.Stop();
                 timer.Dispose();
-                        }
-            timer = new System.Timers.Timer(100000);
+            }
+            timer = new System.Timers.Timer(checkedRadioButtonTimeGroup.TotalMilliseconds);
             FeedLoader feedLoader = new ConcreteFeedLoader();
             ThreadPool.QueueUserWorkItem((state) => RefreshBindingInFeedContent(feedLoader));
             timer.Elapsed += (o, args) => RefreshBindingInFeedContent(feedLoader);
@@ -179,7 +177,7 @@ namespace RssNewsReader
         }
 
         private void RefreshBindingInFeedContent(FeedLoader feedLoader)
-            {
+        {
             feedContent.Dispatcher.BeginInvoke(
                 new Action(() => feedContent.DataContext =
                     feedLoader.LoadFeedsEntry(rssFeedsList, tagList, emailList)));
