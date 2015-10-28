@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
@@ -21,10 +22,10 @@ namespace RssNewsReader.FeedsTemplate
 
         protected override IEnumerable<SyndicationItem> LoadFeeds(IEnumerable<string> feedsToLoad)
         {
-            try
+            var items = new List<SyndicationItem>();
+            foreach (var feed in feedsToLoad)
             {
-                var items = new List<SyndicationItem>();
-                foreach (var feed in feedsToLoad)
+                try
                 {
                     using (XmlReader reader = XmlReader.Create(feed))
                     {
@@ -32,14 +33,11 @@ namespace RssNewsReader.FeedsTemplate
                         formatter.ReadFrom(reader);
                         items.AddRange(formatter.Feed.Items);
                     }
+                    MessageBox.Show("1");
                 }
-                MessageBox.Show("1");
-                return items;
+                catch (FileNotFoundException ex) { }
             }
-            catch (WebException ex)
-            {
-                throw new WebException("RSS Reader Exception");
-            }
+            return items;
         }
 
         protected override IEnumerable<SyndicationItem> FilterFeeds(IEnumerable<SyndicationItem> feeds,
