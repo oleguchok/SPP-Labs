@@ -8,6 +8,7 @@ using System.ServiceModel.Syndication;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -18,6 +19,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Xml;
 using RssNewsReader.FeedsTemplate;
 
@@ -32,6 +34,7 @@ namespace RssNewsReader
         private TimeSpan checkedRadioButtonTimeGroup = new TimeSpan(0,1,0);
         private List<SyndicationItem> currentFeeds = new List<SyndicationItem>(); 
         private List<SyndicationItem> filterResult = new List<SyndicationItem>();
+        private System.Timers.Timer timer;
 
         #region Observable Collections
         private ObservableCollection<string> rssFeedsList = new ObservableCollection<string>(
@@ -58,13 +61,24 @@ namespace RssNewsReader
                     var formatter = new Rss20FeedFormatter();
                     formatter.ReadFrom(reader);
                     this.DataContext = formatter.Feed;
-                    this.feedContent.DataContext = formatter.Feed.Items;
+                    feedContent.DataContext = formatter.Feed.Items;
+                    if (timer != null)
+                        timer.Stop();
                 }
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message);
             }
             catch (WebException ex)
             {
                 MessageBox.Show(ex.Message, "Syndication Reader");
             }
+            finally
+            {
+                if (timer != null)
+                    timer.Dispose();
+        }
         }
 
         #region Menu
@@ -152,133 +166,25 @@ namespace RssNewsReader
 
         private void GetFeedByCriteriasButton_OnClick(object sender, RoutedEventArgs e)
         {
-            System.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
-            timer.Interval = checkedRadioButtonTimeGroup;
-            timer.Tick += new EventHandler(GetFeedInNewThread);
+            if (timer != null)
+        {
+                timer.Stop();
+                timer.Dispose();
+                        }
+            timer = new System.Timers.Timer(100000);
+            FeedLoader feedLoader = new ConcreteFeedLoader();
+            ThreadPool.QueueUserWorkItem((state) => RefreshBindingInFeedContent(feedLoader));
+            timer.Elapsed += (o, args) => RefreshBindingInFeedContent(feedLoader);
             timer.Start();
         }
 
-        private void GetFeedInNewThread(object sender, EventArgs e)
-        {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(GetFeedByTime));
-            ThreadPool.QueueUserWorkItem(new WaitCallback(SendFeedsForAll));
+        private void RefreshBindingInFeedContent(FeedLoader feedLoader)
+            {
+            feedContent.Dispatcher.BeginInvoke(
+                new Action(() => feedContent.DataContext =
+                    feedLoader.LoadFeedsEntry(rssFeedsList, tagList, emailList)));
         }
 
-        private void ParseFeedByCtireria(object state)
-        {
-            filterResult.Clear();
-            foreach (var tag in tagList)
-            {
-                lock (currentFeeds)
-                {
-                    foreach (var syndicationItem in currentFeeds)
-                    {
-                        if (syndicationItem.Summary.Text.Contains(tag))
-                        {
-                            filterResult.Add(syndicationItem);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void GetFeedByTime(object time)
-        {
-            /*
-            lock (currentFeeds)
-            {
-                foreach (var feed in rssFeedsList)
-            {
-                    currentFeeds.AddRange(GetFeedsFromUrl(feed));
-                }
-            }
-            */
-            List<SyndicationItem> tempListFeeds = new List<SyndicationItem>();
-            foreach (var feed in rssFeedsList)
-            {
-                IEnumerable<SyndicationItem> feeds = GetFeedsFromUrl(feed);
-                if (feeds != null)
-                    tempListFeeds.AddRange(feeds);
-            }
-            List<SyndicationItem> tempListFilterFeeds = new List<SyndicationItem>();
-            if (tagList.Count > 0)
-            {
-                foreach (var syndicationItem in tempListFeeds)
-                {
-                    foreach (var tag in tagList)
-                    {
-                        if (syndicationItem.Summary.Text.Contains(tag))
-                        {
-                            tempListFilterFeeds.Add(syndicationItem);
-                            break;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                tempListFilterFeeds.AddRange(tempListFeeds);
-            }
-            lock (currentFeeds)
-            {
-                currentFeeds.AddRange(tempListFilterFeeds);
-            }
-        }
-
-        private void SendFeedsForAll(object state)
-        {
-            MailSender mailSender = new MailSender();
-            string message = FormMessage();
-            string subject = "You rss feeds by " + DateTime.Now.ToString();
-            string sender = @"pasechny.denis@yandex.ru";
-            string password = @"1q2w3e4rasdfzxc";
-            foreach (var recipient in emailList)
-            {
-                try
-                {
-                    mailSender.Send(sender, password, recipient, message, subject);
-                }
-                catch
-                {
-
-                }
-            }
-        }
-
-        private string FormMessage()
-        {
-            string message = String.Empty;
-            while (currentFeeds.Count == 0)
-            {
-                Thread.Sleep(20);
-            }
-            lock (currentFeeds)
-            {
-                foreach (var feed in currentFeeds)
-                {
-                    message += feed.Title.Text + " " + feed.Links.First().Uri.ToString() + Environment.NewLine;
-                }
-            }
-            return message;
-        }
-
-        private IEnumerable<SyndicationItem> GetFeedsFromUrl(string feed)
-        {
-            try
-            {
-                using (XmlReader reader = XmlReader.Create(feed))
-                {
-                    var formatter = new Rss20FeedFormatter();
-                    formatter.ReadFrom(reader);
-                    return formatter.Feed.Items;
-                }
-            }
-            catch (WebException ex)
-            {
-                MessageBox.Show(ex.Message, "Syndication Reader");
-                return null;
-            }
-        }
         private void RssFeedsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             textUrl.Text = (string)RssFeedsList.SelectedValue;
