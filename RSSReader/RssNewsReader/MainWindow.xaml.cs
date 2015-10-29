@@ -33,6 +33,7 @@ namespace RssNewsReader
         private int menuShowClick;
         private TimeSpan checkedRadioButtonTimeGroup = new TimeSpan(0,1,0);
         private System.Timers.Timer timer;
+        private FeedLoader feedLoader;
 
         #region Observable Collections
         private ObservableCollection<string> rssFeedsList = new ObservableCollection<string>(
@@ -50,6 +51,7 @@ namespace RssNewsReader
             RssFeedsList.DataContext = rssFeedsList;
             EmailList.DataContext = emailList;
             TagList.DataContext = tagList;
+            feedLoader = new ConcreteFeedLoader();
         }
 
         private void OnGetFeed(object sender, RoutedEventArgs e)
@@ -166,13 +168,20 @@ namespace RssNewsReader
 
         private void GetFeedByCriteriasButton_OnClick(object sender, RoutedEventArgs e)
         {
+            if (UseServiceCheckBox.IsChecked == false)
+            {
+                feedLoader = new ConcreteFeedLoader();
+            }
+            else
+            {
+                feedLoader = new ServiceFeedLoader();
+            }
             if (timer != null)
             {
                 timer.Stop();
                 timer.Dispose();
             }
             timer = new System.Timers.Timer(checkedRadioButtonTimeGroup.TotalMilliseconds);
-            FeedLoader feedLoader = new ConcreteFeedLoader();
             ThreadPool.QueueUserWorkItem((state) => RefreshBindingInFeedContent(feedLoader));
             timer.Elapsed += (o, args) => RefreshBindingInFeedContent(feedLoader);
             timer.Start();
