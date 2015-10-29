@@ -4,10 +4,9 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Syndication;
-using System.ServiceModel.Web;
 using System.Text;
 
-namespace FeedService
+namespace FeedServiceHost
 {
     [ServiceContract]
     public interface IFeedService
@@ -15,5 +14,4 @@ namespace FeedService
         [OperationContract]
         Rss20FeedFormatter GetFeed(string feedUrl);
     }
-
 }

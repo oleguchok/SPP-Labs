@@ -6,11 +6,10 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Syndication;
-using System.ServiceModel.Web;
 using System.Text;
 using System.Xml;
 
-namespace FeedService
+namespace FeedServiceHost
 {
     public class FeedService : IFeedService
     {
