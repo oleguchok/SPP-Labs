@@ -15,26 +15,21 @@ namespace RssNewsReader.FeedsTemplate
         protected override void SendToRecipients(IEnumerable<string> recipients,
             IEnumerable<SyndicationItem> feeds)
         {
-            throw new NotImplementedException();
+            
         }
 
         protected override IEnumerable<SyndicationItem> LoadFilterFeeds(IEnumerable<string> feedsToLoad,
             IEnumerable<string> filterTags)
         {
-            var feedItems = GetItemsFromFeeds(feedsToLoad);
-            
-            return feedItems;
-        }
-
-        private IEnumerable<SyndicationItem> GetItemsFromFeeds(IEnumerable<string> feedsToLoad)
-        {
             var feedItems = new List<SyndicationItem>();
             foreach (var feed in feedsToLoad)
             {
                 var formatter = proxy.GetFeed(feed);
+                formatter = proxy.FilterFeed(formatter, filterTags.ToArray());
                 feedItems.AddRange(formatter.Feed.Items);
             }
             return feedItems;
         }
+
     }
 }

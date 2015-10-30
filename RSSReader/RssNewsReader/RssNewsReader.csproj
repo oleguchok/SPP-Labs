@@ -102,6 +102,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Service References\FeedServiceReference\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\FeedServiceReference\service.wsdl" />
     <None Include="Service References\FeedServiceReference\service.xsd">
       <SubType>Designer</SubType>

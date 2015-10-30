@@ -27,5 +27,35 @@ namespace FeedServiceHost
             catch (WebException ex) { }
             return formatter;
         }
+
+        private List<SyndicationItem> FilterItemsInFeedByTags(IEnumerable<SyndicationItem> items,
+            IEnumerable<string> tags) 
+        {
+            var filteredList = new List<SyndicationItem>();
+            if (tags.Any())
+            {
+                foreach (var syndicationItem in items)
+                {
+                    foreach (var tag in tags)
+                    {
+                        if (syndicationItem.Summary.Text.ToUpper().Contains(tag.ToUpper()))
+                        {
+                            filteredList.Add(syndicationItem);
+                            break;
+                        }
+                    }
+                }
+                return filteredList;
+            }
+            return items.ToList();
+        }
+
+        public Rss20FeedFormatter FilterFeed(Rss20FeedFormatter formatterFeed, IEnumerable<string> tags)
+        {
+            var feed = new SyndicationFeed() {Title = new TextSyndicationContent("Service Feed")};
+            var result = new Rss20FeedFormatter(feed);
+            result.Feed.Items = FilterItemsInFeedByTags(formatterFeed.Feed.Items, tags);
+            return result;
+        }
     }
 }

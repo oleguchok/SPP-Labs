@@ -20,6 +20,12 @@ namespace RssNewsReader.FeedServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFeedService/GetFeed", ReplyAction="http://tempuri.org/IFeedService/GetFeedResponse")]
         System.Threading.Tasks.Task<System.ServiceModel.Syndication.Rss20FeedFormatter> GetFeedAsync(string feedUrl);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFeedService/FilterFeed", ReplyAction="http://tempuri.org/IFeedService/FilterFeedResponse")]
+        System.ServiceModel.Syndication.Rss20FeedFormatter FilterFeed(System.ServiceModel.Syndication.Rss20FeedFormatter formatterFeed, string[] tags);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFeedService/FilterFeed", ReplyAction="http://tempuri.org/IFeedService/FilterFeedResponse")]
+        System.Threading.Tasks.Task<System.ServiceModel.Syndication.Rss20FeedFormatter> FilterFeedAsync(System.ServiceModel.Syndication.Rss20FeedFormatter formatterFeed, string[] tags);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -55,6 +61,14 @@ namespace RssNewsReader.FeedServiceReference {
         
         public System.Threading.Tasks.Task<System.ServiceModel.Syndication.Rss20FeedFormatter> GetFeedAsync(string feedUrl) {
             return base.Channel.GetFeedAsync(feedUrl);
+        }
+        
+        public System.ServiceModel.Syndication.Rss20FeedFormatter FilterFeed(System.ServiceModel.Syndication.Rss20FeedFormatter formatterFeed, string[] tags) {
+            return base.Channel.FilterFeed(formatterFeed, tags);
+        }
+        
+        public System.Threading.Tasks.Task<System.ServiceModel.Syndication.Rss20FeedFormatter> FilterFeedAsync(System.ServiceModel.Syndication.Rss20FeedFormatter formatterFeed, string[] tags) {
+            return base.Channel.FilterFeedAsync(formatterFeed, tags);
         }
     }
 }
