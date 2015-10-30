@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Text;
@@ -15,7 +16,9 @@ namespace RssNewsReader.FeedsTemplate
         protected override void SendToRecipients(IEnumerable<string> recipients,
             SyndicationFeedFormatter formatter)
         {
-            
+            proxy.ConfigureEmailSender(ConfigurationManager.AppSettings["senderEmail"],
+                ConfigurationManager.AppSettings["senderPassword"]);
+            proxy.SendFeedToRecipientsByEmail(recipients.ToArray(), (Rss20FeedFormatter)formatter);
         }
 
         protected override SyndicationFeedFormatter LoadFilterFeeds(IEnumerable<string> feedsToLoad,

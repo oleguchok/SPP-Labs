@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="FeedService.cs" />
     <Compile Include="IFeedService.cs" />
+    <Compile Include="Mail.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

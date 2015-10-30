@@ -20,6 +20,9 @@ namespace FeedServiceHost
 
         [OperationContract]
         void ConfigureEmailSender(string email, string password);
+
+        [OperationContract]
+        void SendFeedToRecipientsByEmail(IEnumerable<string> recipients, Rss20FeedFormatter formatter);
     }
 
 }

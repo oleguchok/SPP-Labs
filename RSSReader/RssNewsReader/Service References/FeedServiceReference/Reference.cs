@@ -32,6 +32,12 @@ namespace RssNewsReader.FeedServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFeedService/ConfigureEmailSender", ReplyAction="http://tempuri.org/IFeedService/ConfigureEmailSenderResponse")]
         System.Threading.Tasks.Task ConfigureEmailSenderAsync(string email, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFeedService/SendFeedToRecipientsByEmail", ReplyAction="http://tempuri.org/IFeedService/SendFeedToRecipientsByEmailResponse")]
+        void SendFeedToRecipientsByEmail(string[] recipients, System.ServiceModel.Syndication.Rss20FeedFormatter formatter);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFeedService/SendFeedToRecipientsByEmail", ReplyAction="http://tempuri.org/IFeedService/SendFeedToRecipientsByEmailResponse")]
+        System.Threading.Tasks.Task SendFeedToRecipientsByEmailAsync(string[] recipients, System.ServiceModel.Syndication.Rss20FeedFormatter formatter);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -83,6 +89,14 @@ namespace RssNewsReader.FeedServiceReference {
         
         public System.Threading.Tasks.Task ConfigureEmailSenderAsync(string email, string password) {
             return base.Channel.ConfigureEmailSenderAsync(email, password);
+        }
+        
+        public void SendFeedToRecipientsByEmail(string[] recipients, System.ServiceModel.Syndication.Rss20FeedFormatter formatter) {
+            base.Channel.SendFeedToRecipientsByEmail(recipients, formatter);
+        }
+        
+        public System.Threading.Tasks.Task SendFeedToRecipientsByEmailAsync(string[] recipients, System.ServiceModel.Syndication.Rss20FeedFormatter formatter) {
+            return base.Channel.SendFeedToRecipientsByEmailAsync(recipients, formatter);
         }
     }
 }

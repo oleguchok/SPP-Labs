@@ -27,6 +27,12 @@
   <wsdl:message name="IFeedService_ConfigureEmailSender_OutputMessage">
     <wsdl:part name="parameters" element="tns:ConfigureEmailSenderResponse" />
   </wsdl:message>
+  <wsdl:message name="IFeedService_SendFeedToRecipientsByEmail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendFeedToRecipientsByEmail" />
+  </wsdl:message>
+  <wsdl:message name="IFeedService_SendFeedToRecipientsByEmail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendFeedToRecipientsByEmailResponse" />
+  </wsdl:message>
   <wsdl:portType name="IFeedService">
     <wsdl:operation name="GetFeed">
       <wsdl:input wsaw:Action="http://tempuri.org/IFeedService/GetFeed" message="tns:IFeedService_GetFeed_InputMessage" />
@@ -39,6 +45,10 @@
     <wsdl:operation name="ConfigureEmailSender">
       <wsdl:input wsaw:Action="http://tempuri.org/IFeedService/ConfigureEmailSender" message="tns:IFeedService_ConfigureEmailSender_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFeedService/ConfigureEmailSenderResponse" message="tns:IFeedService_ConfigureEmailSender_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendFeedToRecipientsByEmail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFeedService/SendFeedToRecipientsByEmail" message="tns:IFeedService_SendFeedToRecipientsByEmail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFeedService/SendFeedToRecipientsByEmailResponse" message="tns:IFeedService_SendFeedToRecipientsByEmail_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="FeedServiceEndpoint" type="tns:IFeedService">
@@ -63,6 +73,15 @@
     </wsdl:operation>
     <wsdl:operation name="ConfigureEmailSender">
       <soap:operation soapAction="http://tempuri.org/IFeedService/ConfigureEmailSender" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendFeedToRecipientsByEmail">
+      <soap:operation soapAction="http://tempuri.org/IFeedService/SendFeedToRecipientsByEmail" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

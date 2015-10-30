@@ -44,4 +44,17 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="SendFeedToRecipientsByEmail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="recipients" nillable="true" type="q5:ArrayOfstring" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/System.ServiceModel.Syndication" minOccurs="0" name="formatter" nillable="true" type="q6:Rss20FeedFormatter" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendFeedToRecipientsByEmailResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

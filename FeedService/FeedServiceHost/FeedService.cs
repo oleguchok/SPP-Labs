@@ -13,9 +13,6 @@ namespace FeedServiceHost
 {
     public class FeedService : IFeedService
     {
-        private string emailSender;
-        private string passwordSender;
-
         public Rss20FeedFormatter GetFeed(string feedUrl)
         {
             var formatter = new Rss20FeedFormatter();
@@ -42,8 +39,38 @@ namespace FeedServiceHost
 
         public void ConfigureEmailSender(string email, string password)
         {
-            emailSender = email;
-            passwordSender = password;
+            using (var fs = new FileStream("config.txt", FileMode.Create))
+            {
+                using (var bw = new BinaryWriter(fs))
+                {
+                    bw.Write(email);
+                    bw.Write(password);
+                }
+            }
+        }
+
+        public void SendFeedToRecipientsByEmail(IEnumerable<string> recipients, Rss20FeedFormatter formatter)
+        {
+            var mailSender = new MailSender();
+            string sender, password;
+            string message = FormMessage(formatter.Feed.Items);
+            string subject = "You rss feeds by " + DateTime.Now;
+            using (FileStream fs = new FileStream("config.txt", FileMode.Open))
+            {
+                using (var br = new BinaryReader(fs))
+                {
+                    sender = br.ReadString();
+                    password = br.ReadString();
+                }
+            }
+            foreach (var recipient in recipients)
+            {
+                try
+                {
+                    mailSender.Send(sender, password, recipient, message, subject);
+                }
+                catch { }
+            }
         }
 
         private List<SyndicationItem> FilterItemsInFeedByTags(IEnumerable<SyndicationItem> items,
@@ -66,6 +93,17 @@ namespace FeedServiceHost
                 return filteredList;
             }
             return items.ToList();
+        }
+
+        private string FormMessage(IEnumerable<SyndicationItem> feeds)
+        {
+            string message = String.Empty;
+            foreach (var feed in feeds)
+            {
+                message += feed.Title.Text + " " + feed.Links.First().Uri +
+                    Environment.NewLine;
+            }
+            return message;
         }
     }
 }
