@@ -46,6 +46,8 @@ namespace RssNewsReader
         public MainWindow() 
         {
             InitializeComponent();
+            rssFeedsList.Add("dsfsfdfdssfsdfsfsd");
+
             RssFeedsList.DataContext = rssFeedsList;
             EmailList.DataContext = emailList;
             TagList.DataContext = tagList;
