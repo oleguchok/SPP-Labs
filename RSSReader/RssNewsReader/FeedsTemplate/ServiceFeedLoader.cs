@@ -13,22 +13,24 @@ namespace RssNewsReader.FeedsTemplate
         private readonly FeedServiceClient proxy = new FeedServiceClient();
 
         protected override void SendToRecipients(IEnumerable<string> recipients,
-            IEnumerable<SyndicationItem> feeds)
+            SyndicationFeedFormatter formatter)
         {
             
         }
 
-        protected override IEnumerable<SyndicationItem> LoadFilterFeeds(IEnumerable<string> feedsToLoad,
+        protected override SyndicationFeedFormatter LoadFilterFeeds(IEnumerable<string> feedsToLoad,
             IEnumerable<string> filterTags)
         {
             var feedItems = new List<SyndicationItem>();
+            var formatter = new Rss20FeedFormatter();
             foreach (var feed in feedsToLoad)
             {
-                var formatter = proxy.GetFeed(feed);
+                formatter = proxy.GetFeed(feed);
                 formatter = proxy.FilterFeed(formatter, filterTags.ToArray());
                 feedItems.AddRange(formatter.Feed.Items);
             }
-            return feedItems;
+            formatter.Feed.Items = feedItems;
+            return formatter;
         }
 
     }

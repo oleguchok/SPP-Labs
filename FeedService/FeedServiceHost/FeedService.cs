@@ -13,6 +13,9 @@ namespace FeedServiceHost
 {
     public class FeedService : IFeedService
     {
+        private string emailSender;
+        private string passwordSender;
+
         public Rss20FeedFormatter GetFeed(string feedUrl)
         {
             var formatter = new Rss20FeedFormatter();
@@ -28,8 +31,23 @@ namespace FeedServiceHost
             return formatter;
         }
 
+        public Rss20FeedFormatter FilterFeed(Rss20FeedFormatter formatterFeed, IEnumerable<string> tags)
+        {
+            var feed = new SyndicationFeed() {Title = new TextSyndicationContent("Service Feed")};
+            var result = new Rss20FeedFormatter(feed);
+            result.Feed.Items = FilterItemsInFeedByTags(formatterFeed.Feed.Items, tags);
+            return result;
+        }
+
+
+        public void ConfigureEmailSender(string email, string password)
+        {
+            emailSender = email;
+            passwordSender = password;
+        }
+
         private List<SyndicationItem> FilterItemsInFeedByTags(IEnumerable<SyndicationItem> items,
-            IEnumerable<string> tags) 
+            IEnumerable<string> tags)
         {
             var filteredList = new List<SyndicationItem>();
             if (tags.Any())
@@ -48,14 +66,6 @@ namespace FeedServiceHost
                 return filteredList;
             }
             return items.ToList();
-        }
-
-        public Rss20FeedFormatter FilterFeed(Rss20FeedFormatter formatterFeed, IEnumerable<string> tags)
-        {
-            var feed = new SyndicationFeed() {Title = new TextSyndicationContent("Service Feed")};
-            var result = new Rss20FeedFormatter(feed);
-            result.Feed.Items = FilterItemsInFeedByTags(formatterFeed.Feed.Items, tags);
-            return result;
         }
     }
 }

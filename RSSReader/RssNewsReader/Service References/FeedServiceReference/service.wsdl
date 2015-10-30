@@ -21,6 +21,12 @@
   <wsdl:message name="IFeedService_FilterFeed_OutputMessage">
     <wsdl:part name="parameters" element="tns:FilterFeedResponse" />
   </wsdl:message>
+  <wsdl:message name="IFeedService_ConfigureEmailSender_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConfigureEmailSender" />
+  </wsdl:message>
+  <wsdl:message name="IFeedService_ConfigureEmailSender_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConfigureEmailSenderResponse" />
+  </wsdl:message>
   <wsdl:portType name="IFeedService">
     <wsdl:operation name="GetFeed">
       <wsdl:input wsaw:Action="http://tempuri.org/IFeedService/GetFeed" message="tns:IFeedService_GetFeed_InputMessage" />
@@ -29,6 +35,10 @@
     <wsdl:operation name="FilterFeed">
       <wsdl:input wsaw:Action="http://tempuri.org/IFeedService/FilterFeed" message="tns:IFeedService_FilterFeed_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFeedService/FilterFeedResponse" message="tns:IFeedService_FilterFeed_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConfigureEmailSender">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFeedService/ConfigureEmailSender" message="tns:IFeedService_ConfigureEmailSender_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFeedService/ConfigureEmailSenderResponse" message="tns:IFeedService_ConfigureEmailSender_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="FeedServiceEndpoint" type="tns:IFeedService">
@@ -44,6 +54,15 @@
     </wsdl:operation>
     <wsdl:operation name="FilterFeed">
       <soap:operation soapAction="http://tempuri.org/IFeedService/FilterFeed" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConfigureEmailSender">
+      <soap:operation soapAction="http://tempuri.org/IFeedService/ConfigureEmailSender" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

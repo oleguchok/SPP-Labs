@@ -16,10 +16,10 @@ namespace RssNewsReader.FeedsTemplate
     public class ConcreteFeedLoader : FeedLoader
     {
         protected override void SendToRecipients(IEnumerable<string> recipients,
-            IEnumerable<SyndicationItem> feeds)
+            SyndicationFeedFormatter formatter)
         {
             MailSender mailSender = new MailSender();
-            string message = FormMessage(feeds);
+            string message = FormMessage(formatter.Feed.Items);
             string subject = "You rss feeds by " + DateTime.Now;
             string sender = ConfigurationManager.AppSettings["senderEmail"];
             string password = ConfigurationManager.AppSettings["senderPassword"];
@@ -33,34 +33,35 @@ namespace RssNewsReader.FeedsTemplate
             }
         }
 
-        protected override IEnumerable<SyndicationItem> LoadFilterFeeds(IEnumerable<string> feedsToLoad,
+        protected override SyndicationFeedFormatter LoadFilterFeeds(IEnumerable<string> feedsToLoad,
             IEnumerable<string> filterTags)
         {
-            var items = new List<SyndicationItem>();
+            var formatter = new Rss20FeedFormatter();
+            var feedItems = new List<SyndicationItem>();
             foreach (var feed in feedsToLoad)
             {
                 try
                 {
                     using (XmlReader reader = XmlReader.Create(feed))
                     {
-                        var formatter = new Rss20FeedFormatter();
                         formatter.ReadFrom(reader);
-                        items.AddRange(formatter.Feed.Items);
+                        feedItems.AddRange(formatter.Feed.Items);
                     }
                 }
                 catch (FileNotFoundException ex) { }
                 catch (WebException ex) { }
             }
-            return FilterLoadedFeeds(items, filterTags);
+            formatter.Feed.Items = FilterLoadedFeedItems(feedItems, filterTags);
+            return formatter;
         }
 
-        private IEnumerable<SyndicationItem> FilterLoadedFeeds(IEnumerable<SyndicationItem> loadedFeeds,
+        private List<SyndicationItem> FilterLoadedFeedItems(IEnumerable<SyndicationItem> feedItems,
             IEnumerable<string> filterTags)
         {
             var filteredList = new List<SyndicationItem>();
             if (filterTags.Any())
             {
-                foreach (var syndicationItem in loadedFeeds)
+                foreach (var syndicationItem in feedItems)
                 {
                     foreach (var tag in filterTags)
                     {
@@ -73,7 +74,7 @@ namespace RssNewsReader.FeedsTemplate
                 }
                 return filteredList;
             }
-                return loadedFeeds;
+            return feedItems.ToList();
         }
 
         private string FormMessage(IEnumerable<SyndicationItem> feeds)

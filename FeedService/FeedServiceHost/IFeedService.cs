@@ -17,6 +17,9 @@ namespace FeedServiceHost
 
         [OperationContract]
         Rss20FeedFormatter FilterFeed(Rss20FeedFormatter formatterFeed, IEnumerable<string> tags);
+
+        [OperationContract]
+        void ConfigureEmailSender(string email, string password);
     }
 
 }
