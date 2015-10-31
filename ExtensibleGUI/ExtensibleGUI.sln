@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtensibleGUI", "ExtensibleGUI\ExtensibleGUI.csproj", "{B98CC5BD-91E7-4EB6-9D82-D699A9B4D05D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtensibleUIAttribute", "ExtensibleUIAttribute\ExtensibleUIAttribute.csproj", "{F1ED0C07-E94F-4110-8F07-8CB5A0E98F77}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B98CC5BD-91E7-4EB6-9D82-D699A9B4D05D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B98CC5BD-91E7-4EB6-9D82-D699A9B4D05D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B98CC5BD-91E7-4EB6-9D82-D699A9B4D05D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B98CC5BD-91E7-4EB6-9D82-D699A9B4D05D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1ED0C07-E94F-4110-8F07-8CB5A0E98F77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1ED0C07-E94F-4110-8F07-8CB5A0E98F77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1ED0C07-E94F-4110-8F07-8CB5A0E98F77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1ED0C07-E94F-4110-8F07-8CB5A0E98F77}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
