@@ -91,6 +91,14 @@ namespace ExtensibleGUI
         {
             Form form = (Form)type.GetConstructor(new Type[0]).Invoke(null);
             form.Hide();
+            if (groupBoxLayoutAttribute.IsGroupBox)
+            {
+                var controls = new Control[form.Controls.Count];
+                form.Controls.CopyTo(controls, 0);
+                groupBoxBottom.Controls.AddRange(controls);
+                groupBoxBottom.Size = form.Size;
+            }
+            else { DefaultPosition(form);}
         }
 
         private void HandleLayoutAttribute(TabLayoutAttribute tabLayoutAttribute, Type type)
