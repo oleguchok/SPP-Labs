@@ -9,11 +9,11 @@ namespace ExtensibleUIAttribute
     [AttributeUsage(AttributeTargets.Class)]
     public class TabLayoutAttribute : Attribute
     {
-        public bool IsBool { get; set; }
+        public bool IsTab { get; set; }
 
         public TabLayoutAttribute(bool isTab)
         {
-            IsBool = isTab;
+            IsTab = isTab;
         }
     }
 }

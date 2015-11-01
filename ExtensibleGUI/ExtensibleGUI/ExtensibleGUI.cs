@@ -97,16 +97,45 @@ namespace ExtensibleGUI
         {
             Form form = (Form)type.GetConstructor(new Type[0]).Invoke(null);
             form.Hide();
+            if (tabLayoutAttribute.IsTab)
+            {
+                form.FormBorderStyle = FormBorderStyle.None;
+                TabPage tp = new TabPage();
+                tp.Text = form.Text;
+                tabControlMain.TabPages.Add(tp);
+                form.TopLevel = false;
+                form.Parent = tp;
+                form.Show();
+            }
+            else
+            {
+                DefaultPosition(form);
+            }
         }
 
         private void HandleLayoutAttribute(PanelLayoutAttribute attribute, Type type)
         {
             Form form = (Form)type.GetConstructor(new Type[0]).Invoke(null);
             form.Hide();
-            var controls = new Control[form.Controls.Count];
-            form.Controls.CopyTo(controls, 0);
-            panelLeft.Controls.AddRange(controls);
-            panelLeft.Size = form.Size;
+            if (attribute.IsPanel)
+            {
+                var controls = new Control[form.Controls.Count];
+                form.Controls.CopyTo(controls, 0);
+                panelLeft.Controls.AddRange(controls);
+                panelLeft.Size = form.Size;
+            }
+            else
+            {
+                DefaultPosition(form);
+            }
+        }
+
+        private void DefaultPosition(Form form)
+        {
+            form.Left = 0;
+            form.Top = 0;
+            form.StartPosition = FormStartPosition.Manual;
+            form.Show();
         }
     }
 }
