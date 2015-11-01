@@ -17,6 +17,10 @@ namespace ResourceViewer
         public Int64 PercentOfVirtualMemory { get; set; }
         public Int64 PercentOfPhysicalMemory { get; set; }
         public Int64 PercentOfCPU { get; set; }
+        public Double NumberGBOfUsedVM { get; set; }
+        public Double NumberGBOfTotalVM { get; set; }
+        public Double NumberGBOfUsedPM { get; set; }
+        public Double NumberGBOfTotalPM { get; set; }
 
         public SystemData()
         {
@@ -52,9 +56,13 @@ namespace ResourceViewer
 
         private void RecountData()
         {
-            PercentOfVirtualMemory = (virtualMemoryTotal == 0) ? (0) : (Convert.ToInt64(((double)virtualMemoryUsed  / (double)virtualMemoryTotal)*100));
-            PercentOfPhysicalMemory = (physicalMemoryTotal == 0) ? (0) : (Convert.ToInt64(((double)physicalMemoryUsed / (double)physicalMemoryTotal) * 100));
+            PercentOfVirtualMemory = (virtualMemoryTotal == 0) ? (0) : (Convert.ToInt64(((Double)virtualMemoryUsed / (Double)virtualMemoryTotal) * 100));
+            PercentOfPhysicalMemory = (physicalMemoryTotal == 0) ? (0) : (Convert.ToInt64(((Double)physicalMemoryUsed / (Double)physicalMemoryTotal) * 100));
             PercentOfCPU = cpu;
+            NumberGBOfUsedVM = virtualMemoryUsed / 1073741824.0;
+            NumberGBOfTotalVM = virtualMemoryTotal / 1073741824.0;
+            NumberGBOfUsedPM = physicalMemoryUsed / 1073741824.0;
+            NumberGBOfTotalPM = physicalMemoryTotal / 1073741824.0;
         }
     }
 }

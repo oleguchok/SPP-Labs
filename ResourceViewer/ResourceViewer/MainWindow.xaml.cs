@@ -62,6 +62,11 @@ namespace ResourceViewer
             ProgressBarUsedVirtualMemory.Value = sd.PercentOfVirtualMemory;
             ProgressBarUsedPhysicalMemory.Value = sd.PercentOfPhysicalMemory;
             ProgressBarCPU.Value = sd.PercentOfCPU;
+            labelVMNumbers.Content = String.Format("{0}% ({1:0.00}/{2:0.00}GB)",
+                sd.PercentOfVirtualMemory, sd.NumberGBOfUsedVM, sd.NumberGBOfTotalVM);
+            labelPMNumbers.Content = String.Format("{0}% ({1:0.00}/{2:0.00}GB)",
+                sd.PercentOfPhysicalMemory, sd.NumberGBOfUsedPM, sd.NumberGBOfTotalPM);
+            labelCPUNumbers.Content = String.Format("{0}%", sd.PercentOfCPU);
         }
 
         [DllImport("MonitoringLib", CallingConvention = CallingConvention.StdCall)]
