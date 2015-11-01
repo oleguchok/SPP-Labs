@@ -12,6 +12,7 @@ using ExtensibleUIAttribute;
 namespace GroupBoxPlugin
 {
     [GroupBoxLayout(true)] 
+    [TabLayout(true)]
     [PanelLayout(true)]
     public partial class Form1 : Form
     {

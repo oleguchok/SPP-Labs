@@ -95,8 +95,7 @@ namespace ExtensibleGUI
             {
                 var controls = new Control[form.Controls.Count];
                 form.Controls.CopyTo(controls, 0);
-                groupBoxBottom.Controls.AddRange(controls);
-                groupBoxBottom.Size = form.Size;
+                flowLayoutPanel2.Controls.AddRange(controls);
             }
             else { DefaultPosition(form);}
         }
@@ -129,8 +128,7 @@ namespace ExtensibleGUI
             {
                 var controls = new Control[form.Controls.Count];
                 form.Controls.CopyTo(controls, 0);
-                panelLeft.Controls.AddRange(controls);
-                panelLeft.Size = form.Size;
+                flowLayoutPanel1.Controls.AddRange(controls);
             }
             else
             {
