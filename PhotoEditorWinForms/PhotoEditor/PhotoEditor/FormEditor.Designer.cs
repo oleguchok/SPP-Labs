@@ -43,7 +43,7 @@ namespace PhotoEditor
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tabPageImage = new System.Windows.Forms.TabPage();
             this.toolStripImage = new System.Windows.Forms.ToolStrip();
-            this.TrackBarBrightness = new System.Windows.Forms.TrackBar();
+            //this.TrackBarBrightness = new System.Windows.Forms.TrackBar();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.panelPictureBox = new System.Windows.Forms.Panel();
             this.pictureBox = new System.Windows.Forms.PictureBox();
