@@ -484,24 +484,31 @@ namespace PhotoEditor
             }
             else
             {
-                CorrectPointOfRectangle(ref firstPointCut, ref secondPointCut);
-                Bitmap bmp = originalImage as Bitmap;
-                originalImage = null;
-                originalImage = bmp.Clone(
-                    new Rectangle
-                    (
-                        firstPointCut.X,
-                        firstPointCut.Y,
-                        secondPointCut.X - firstPointCut.X,
-                        secondPointCut.Y - firstPointCut.Y
-                    ), bmp.PixelFormat);
-                modifiedImageSize = originalImage.Size;
-                modifiedImage = (Image)originalImage.Clone();
-                RedrawPictureBoxImage(originalImage, modifiedImageSize);
-                PictureBoxLocation();
+                try
+                {
+                    CorrectPointOfRectangle(ref firstPointCut, ref secondPointCut);
+                    Bitmap bmp = originalImage as Bitmap;
+                    originalImage = bmp.Clone(
+                        new Rectangle
+                        (
+                            firstPointCut.X,
+                            firstPointCut.Y,
+                            secondPointCut.X - firstPointCut.X,
+                            secondPointCut.Y - firstPointCut.Y
+                        ), bmp.PixelFormat);
+                    modifiedImageSize = originalImage.Size;
+                    modifiedImage = (Image)originalImage.Clone();
+                    RedrawPictureBoxImage(originalImage, modifiedImageSize);
+                    PictureBoxLocation();
 
-                isCut = false;
-                pictureBoxForCut.Enabled = false;
+                    isCut = false;
+                    pictureBoxForCut.Enabled = false;
+                }
+                catch
+                {
+                    MessageBox.Show(@"Выделите нужную область");
+                    return;
+                }
             }
 
         }
