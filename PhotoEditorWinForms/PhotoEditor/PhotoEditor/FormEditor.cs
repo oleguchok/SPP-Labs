@@ -1,4 +1,5 @@
-﻿using PhotoEditor.ModalForm;
+﻿using System.Runtime.InteropServices;
+using PhotoEditor.ModalForm;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,11 +23,25 @@ namespace PhotoEditor
         private static readonly String IMAGE_FORMATS = 
             "jpg (*.jpg)|*.jpg|bmp (*.bmp)|*.bmp|png (*.png)|*.png";
 
-        private Boolean isCropSelected = false;
         private Boolean isImageScaling = false;
+        private bool isPencil = false;
         private Size modifiedImageSize;
         private Image originalImage;
-        private Image editedImage;
+        private List<Point> pointsToDraw = new List<Point>();
+        private Image modifiedImage;
+        private PictureBox pictureBoxForCut;
+        private Point firstPointCut;
+        private Point secondPointCut;
+        private Boolean isCut = false;
+
+        private float[][] colorMatrixElements =
+{
+                new float[] {1,0,0,0,0},
+                new float[] {0,1,0,0,0},
+                new float[] {0,0,1,0,0},
+                new float[] {0,0,0,1,0},
+                new float[] {0,0,0,0,1}
+            };
 
         public FormEditor()
         {
@@ -40,10 +55,17 @@ namespace PhotoEditor
 
             if (ofd.ShowDialog() == DialogResult.OK && ofd.FileName.Length > 0)
             {          
-                pictureBox.Image = Image.FromFile(ofd.FileName);
+                //pictureBox.Image = Image.FromFile(ofd.FileName);
+                using (FileStream fs = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read))
+                {
+                    originalImage = Image.FromStream(fs);
+                    modifiedImage = Image.FromStream(fs);
+                    pictureBox.Image = Image.FromStream(fs);
+                }
+
                 pictureBox.Height = pictureBox.Image.Height;
                 pictureBox.Width = pictureBox.Image.Width;
-                originalImage = Image.FromFile(ofd.FileName);
+                modifiedImageSize = originalImage.Size;
                 PictureBoxLocation();                
             }  
         }
@@ -71,7 +93,9 @@ namespace PhotoEditor
             if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0)
             {
                 if (!isImageScaling)
+                {
                     pictureBox.Image.Save(sfd.FileName);
+                }
                 else
                     originalImage.Save(sfd.FileName);
             }
@@ -106,7 +130,7 @@ namespace PhotoEditor
         private void CalculateModifiedImageSize(int widthZoom, int heightZoom)
         {
             if (originalImage == null)
-                throw new ArgumentNullException("Image", "Choose image");
+                throw new ArgumentNullException("Image", @"Choose image");
             modifiedImageSize = new Size((originalImage.Width * widthZoom) / 100,
                     (originalImage.Height * heightZoom) / 100);
         }
@@ -149,38 +173,20 @@ namespace PhotoEditor
                 MessageBox.Show(ex.Message);
             }
         }
-<<<<<<< HEAD
-        private void RedrawPictureBoxImage()
-        {
-            Bitmap bm_source = new Bitmap(originalImage);
-            RedrawPictureBoxImage(bm_source);
-        }
-
-        private void RedrawPictureBoxImage(Image bm_source)
-        {
-            Bitmap bm_dest = new Bitmap(modifiedImageSize.Width, modifiedImageSize.Height,
-                PixelFormat.Format24bppRgb);
-=======
 
         private void RedrawPictureBoxImage(Image source, Size modifiedSize)
         {
             Bitmap bm_source = new Bitmap(source);
             Bitmap bm_dest = new Bitmap(modifiedSize.Width, modifiedSize.Height,
                     PixelFormat.Format24bppRgb);
->>>>>>> origin/master
             using (Graphics gr_dest = Graphics.FromImage(bm_dest))
             {
                 gr_dest.CompositingQuality = CompositingQuality.HighQuality;
                 gr_dest.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 gr_dest.SmoothingMode = SmoothingMode.HighQuality;
                 gr_dest.PixelOffsetMode = PixelOffsetMode.HighQuality;
-<<<<<<< HEAD
-                gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width + 1, bm_dest.Height + 1);
-            }                
-=======
                 gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width, bm_dest.Height);
             }
->>>>>>> origin/master
             InsertImageInPictureBox(pictureBox, bm_dest);
         }
 
@@ -241,30 +247,316 @@ namespace PhotoEditor
 
         #endregion
 
-
-<<<<<<< HEAD
-            //PictureBox1.Image
-            editedImage = new Bitmap(originalImage);
-            Graphics g = Graphics.FromImage(editedImage);
-            g.DrawImage(editedImage, new Rectangle(0, 0, originalImage.Width, originalImage.Height)
-                , 0, 0, originalImage.Width, originalImage.Height,
-                GraphicsUnit.Pixel, imageAttributes);
-            RedrawPictureBoxImage(editedImage);
-        }
-
-        private void TrackBarBrightness_Leave(object sender, EventArgs e)
+        #region Paint
+        private void newToolStripButton_Click(object sender, EventArgs e)
         {
-            originalImage = editedImage;
-            TrackBarBrightness.Value = 0;
+            ShowNewEmptyImageForm();
         }
 
-        private void TrackBarBrightness_DragLeave(object sender, EventArgs e)
+        private void ShowNewEmptyImageForm()
         {
-            originalImage = editedImage;
-            TrackBarBrightness.Value = 0;
+            NewEmptyImageForm form = new NewEmptyImageForm();
+            DataExchanger.EventEmptyImageSizeHandler =
+                new DataExchanger.ExchangeEmptyImageSizeEvent(CreateEmtyImage);
+            form.ShowDialog();
+            form.Dispose();
         }
-=======
->>>>>>> origin/master
+
+        private void CreateEmtyImage(int width, int height)
+        {
+            Bitmap Bmp = new Bitmap(width, height);
+            using (Graphics gfx = Graphics.FromImage(Bmp))
+            using (SolidBrush brush = new SolidBrush(Color.White))
+            {
+                gfx.FillRectangle(brush, 0, 0, width, height);
+            }
+            pictureBox.Image = Bmp;
+            originalImage = Bmp;
+            PictureBoxLocation();
+        }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr LoadCursorFromFile(string lpFileName);
+        
+        private void toolStripButtonPen_Click(object sender, EventArgs e)
+        {
+            if (pictureBox.Image != null)
+                isPencil = true;
+        }
+
+        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isPencil)
+            {
+                IntPtr hCursor = LoadCursorFromFile("cur1046.cur");
+                Cursor cursor = new Cursor(hCursor);
+                Cursor = cursor;
+                if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
+                {
+                    pointsToDraw.Add(e.Location);
+                    using (Graphics grp = Graphics.FromImage(pictureBox.Image))
+                    {
+                        if (pointsToDraw.Count > 1)
+                            grp.DrawLines(Pens.Black, pointsToDraw.ToArray());
+                    }
+                    originalImage = pictureBox.Image;
+                pictureBox.Refresh();
+                    pictureBox.Invalidate();
+                }
+            }
+        }
+
+        private void pictureBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (isPencil && (e.Button & MouseButtons.Left) == MouseButtons.Left)
+            {
+                pointsToDraw.Add(e.Location);
+            }
+        }
+
+        private void pictureBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (isPencil)
+            {
+                pointsToDraw.Clear();
+            }
+        }
+
+        private void pictureBox_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = DefaultCursor;
+        }
+
+        private void toolStripButtonDefaultCursor_Click(object sender, EventArgs e)
+        {
+            isPencil = false;
+            isCut = false;
+            if (pictureBoxForCut != null)
+                pictureBoxForCut.Enabled = false;
+        }
+
+        #endregion
+
+        private void trackBarBrightness_Scroll(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+            {
+                MessageBox.Show(@"Choose image");
+                return;
+            }
+            float v = trackBarBrightness.Value * 0.01f;
+            colorMatrixElements[4][0] = v;
+            colorMatrixElements[4][1] = v;
+            colorMatrixElements[4][2] = v;
+            ChangeAttributesOfImage();
+        }
+        
+        private void trackBarColor_Scroll(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+            {
+                MessageBox.Show(@"Choose image");
+                return;
+            }
+            if (checkBoxRed.Checked)
+            {
+                float v = trackBarColor.Value * 0.01f;
+                colorMatrixElements[0][0] = v;
+                ChangeAttributesOfImage();
+            }
+            if (checkBoxGreen.Checked)
+            {
+                float v = trackBarColor.Value * 0.01f;
+                colorMatrixElements[1][1] = v;
+                ChangeAttributesOfImage();
+            }
+            if (checkBoxBlue.Checked)
+            {
+                float v = trackBarColor.Value * 0.01f;
+                colorMatrixElements[2][2] = v;
+                ChangeAttributesOfImage();
+            }
+        }
+
+        private void trackBarContrast_Scroll(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+            {
+                MessageBox.Show(@"Choose image");
+                return;
+            }
+            float v = trackBarContrast.Value * 0.01f;
+            colorMatrixElements[0][0] = v;
+            colorMatrixElements[1][1] = v;
+            colorMatrixElements[2][2] = v;
+            ChangeAttributesOfImage();
+        }
+
+        private void ChangeAttributesOfImage()
+        {
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+            ImageAttributes imageAttributes = new ImageAttributes();
+
+            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+            Graphics g = Graphics.FromImage(modifiedImage);
+            g.DrawImage(originalImage, new Rectangle(0, 0, originalImage.Width, originalImage.Height), 0, 0,
+                originalImage.Width, originalImage.Height, GraphicsUnit.Pixel, imageAttributes);
+            RedrawPictureBoxImage(modifiedImage, modifiedImageSize);
+        }
+
+        private void toolStripButtonAccept_Click(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+            {
+                MessageBox.Show(@"Choose image");
+                return;
+            }
+            originalImage = (Image)modifiedImage.Clone();
+            ClearColorMatrix();
+            trackBarBrightness.Value = 0;
+            trackBarContrast.Value = 100;
+            trackBarColor.Value = 100;
+            checkBoxRed.Checked = false;
+            checkBoxGreen.Checked = false;
+            checkBoxBlue.Checked = false;
+        }
+
+        private void toolStripButtonCancel_Click(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+            {
+                MessageBox.Show(@"Choose image");
+                return;
+            }
+            RedrawPictureBoxImage(originalImage, modifiedImageSize);
+            ClearColorMatrix();
+            trackBarBrightness.Value = 0;
+            trackBarContrast.Value = 100;
+            trackBarColor.Value = 100;
+            checkBoxRed.Checked = false;
+            checkBoxGreen.Checked = false;
+            checkBoxBlue.Checked = false;
+        }
+
+        private void ClearColorMatrix()
+        {
+            colorMatrixElements.Initialize();
+            colorMatrixElements[0][0] = 1;
+            colorMatrixElements[1][1] = 1;
+            colorMatrixElements[2][2] = 1;
+            colorMatrixElements[3][3] = 1;
+            colorMatrixElements[4][4] = 1;
+        }
+
+        private void cutToolStripButton1_Click(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+            {
+                MessageBox.Show(@"Choose image");
+                return;
+            }
+            if (isCut == false)
+            {
+                modifiedImageSize = originalImage.Size;
+                RedrawPictureBoxImage(originalImage, modifiedImageSize);
+                if (pictureBoxForCut == null)
+                {
+                    pictureBoxForCut = new PictureBox
+                    {
+                        Size = pictureBox.Size,
+                        Location = new Point(0, 0),
+                        BackColor = Color.Transparent,
+                        Cursor = Cursors.Cross
+                    };
+                    pictureBox.Controls.Add(pictureBoxForCut);
+                    pictureBoxForCut.MouseDown += PictureBoxForCut_MouseDown;
+                    pictureBoxForCut.MouseUp += PictureBoxForCut_MouseUp;
+                    pictureBoxForCut.MouseMove += PictureBoxForCut_MouseMove;
+                    pictureBoxForCut.DoubleClick += PictureBoxForCut_DoubleClick;
+                    pictureBoxForCut.DragOver += PictureBoxForCut_DragOver;
+                }
+                else
+                {
+                    pictureBoxForCut.Enabled = true;
+                }
+                isCut = true;
+            }
+            else
+            {
+                CorrectPointOfRectangle(ref firstPointCut, ref secondPointCut);
+                Bitmap bmp = originalImage as Bitmap;
+                originalImage = null;
+                originalImage = bmp.Clone(
+                    new Rectangle
+                    (
+                        firstPointCut.X,
+                        firstPointCut.Y,
+                        secondPointCut.X - firstPointCut.X,
+                        secondPointCut.Y - firstPointCut.Y
+                    ), bmp.PixelFormat);
+                modifiedImageSize = originalImage.Size;
+                modifiedImage = (Image)originalImage.Clone();
+                RedrawPictureBoxImage(originalImage, modifiedImageSize);
+                PictureBoxLocation();
+
+                isCut = false;
+                pictureBoxForCut.Enabled = false;
+            }
+
+        }
+
+        private void PictureBoxForCut_MouseDown(object sender, MouseEventArgs e)
+        {
+            firstPointCut = e.Location;
+        }
+
+        private void PictureBoxForCut_MouseUp(object sender, MouseEventArgs e)
+        {
+            secondPointCut = e.Location;
+        }
+
+        private void PictureBoxForCut_DragOver(object sender, DragEventArgs e)
+        {
+            pictureBoxForCut.Enabled = false;
+        }
+
+        private void PictureBoxForCut_DoubleClick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PictureBoxForCut_MouseMove(object sender, MouseEventArgs e)
+        {
+            if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
+            {
+                RedrawCutRectangle(firstPointCut, e.Location);
+            }
+        }
+
+        private void RedrawCutRectangle(Point p1, Point p2)
+        {
+            CorrectPointOfRectangle(ref p1, ref p2);
+            pictureBoxForCut.Image = null;
+            Graphics g = pictureBoxForCut.CreateGraphics();
+            g.DrawRectangle(new Pen(Color.Red), p1.X, p1.Y, p2.X - p1.X, p2.Y - p1.Y);
+        }
+
+        private void CorrectPointOfRectangle(ref Point p1, ref Point p2)
+        {
+            if (p1.X > p2.X)
+            {
+                int tmp = p1.X;
+                p1.X = p2.X;
+                p2.X = tmp;
+            }
+            if (p1.Y > p2.Y)
+            {
+                int tmp = p1.Y;
+                p1.Y = p2.Y;
+                p2.Y = tmp;
+            }
+        }
     }
 
 }
