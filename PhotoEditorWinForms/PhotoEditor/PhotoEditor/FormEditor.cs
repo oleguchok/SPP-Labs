@@ -407,6 +407,11 @@ namespace PhotoEditor
 
         private void toolStripButtonAccept_Click(object sender, EventArgs e)
         {
+            if (originalImage == null)
+            {
+                MessageBox.Show(@"Choose image");
+                return;
+            }
             originalImage = (Image)modifiedImage.Clone();
             ClearColorMatrix();
             trackBarBrightness.Value = 0;
@@ -419,6 +424,11 @@ namespace PhotoEditor
 
         private void toolStripButtonCancel_Click(object sender, EventArgs e)
         {
+            if (originalImage == null)
+            {
+                MessageBox.Show(@"Choose image");
+                return;
+            }
             RedrawPictureBoxImage(originalImage, modifiedImageSize);
             ClearColorMatrix();
             trackBarBrightness.Value = 0;
@@ -486,7 +496,9 @@ namespace PhotoEditor
                         secondPointCut.Y - firstPointCut.Y
                     ), bmp.PixelFormat);
                 modifiedImageSize = originalImage.Size;
+                modifiedImage = (Image)originalImage.Clone();
                 RedrawPictureBoxImage(originalImage, modifiedImageSize);
+                PictureBoxLocation();
 
                 isCut = false;
                 pictureBoxForCut.Enabled = false;
